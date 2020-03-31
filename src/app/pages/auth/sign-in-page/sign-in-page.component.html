@@ -1,0 +1,34 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <h1 class = "mat-h1">Sign in</h1>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<form class="sign-in-form">
+  <mat-form-field class="inputs">
+    <input matInput placeholder="Email">
+    <mat-error *ngIf="false">
+      <!--{{signInFormGroup.get('email').hasError('email') ? 'Please enter a valid email address' : 'Email address is required'}}-->
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field class="inputs">
+    <input matInput placeholder="Password" [type]="hidePassword ? 'password' : 'text'">
+    <mat-icon matSuffix class="clickable" (click)="hidePassword = !hidePassword">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+    <mat-error *ngIf="false">
+      Password is required
+    </mat-error>
+  </mat-form-field>
+  <div class="field">
+    <mat-checkbox color="primary">Remember me</mat-checkbox>
+    <div class="buttons-section">
+      <button mat-flat-button
+              color="primary"
+              class="sign-in-button"
+              [disabled]="false">Sign in<mat-spinner *ngIf="false" class="spinner" [diameter]="20"></mat-spinner></button>
+      <span class="or">Or</span>
+      <button mat-stroked-button (click)="onRegisterClicked()">Register here</button>
+    </div>
+    <mat-error *ngIf="false" class="back-section">
+    </mat-error>
+  </div>
+</form>

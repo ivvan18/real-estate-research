@@ -1,0 +1,74 @@
+.inputs {
+  width: 100% !important;
+}
+
+.sign-in-form {
+  padding: 20px 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  max-width: 65%;
+}
+
+.buttons-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.or{
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 16px;
+}
+
+.register-button {
+  width: 80px;
+  height: 36px;
+
+  & .mat-button-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .spinner {
+    position: absolute;
+    top: 25%;
+    opacity: 1;
+    transition: opacity .3s ease-in-out;
+  }
+}
+
+.email-send-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  height: 300px
+}
+
+.done-icon {
+  transform: scale(3);
+}
+
+.header {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.subheading {
+  margin-bottom: 10px;
+  width: 200px;
+  text-align: center;
+}
+
+.back-section {
+  margin-top: 5px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 75%;
+}
