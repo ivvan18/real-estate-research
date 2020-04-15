@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatIconModule} from '@angular/material/icon';
 import { NavbarComponent } from './util/navbar/navbar.component';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {JwtInterceptor} from './api/jwt.interceptor';
 
 const MatModules = [MatIconModule];
 
@@ -18,9 +20,16 @@ const MatModules = [MatIconModule];
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatModules
+    MatModules,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

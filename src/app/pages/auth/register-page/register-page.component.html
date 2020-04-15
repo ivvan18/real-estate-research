@@ -1,49 +1,51 @@
-<div *ngIf="false; else emailSend">
+<div *ngIf="!accessToken; else emailSend">
   <mat-toolbar color="primary">
     <mat-toolbar-row>
       <h1 class = "mat-h1">Register</h1>
     </mat-toolbar-row>
   </mat-toolbar>
 
-  <form class="sign-in-form">
+  <form class="sign-in-form"
+        [formGroup]="registerFormGroup">
     <mat-form-field class="inputs">
-      <input matInput placeholder="Username">
-      <mat-error *ngIf="false">
+      <input matInput placeholder="Username" formControlName="username">
+      <mat-error *ngIf="registerFormGroup.get('username').hasError('required')">
         Username is required
       </mat-error>
     </mat-form-field>
     <mat-form-field class="inputs">
-      <input matInput placeholder="Email">
-      <mat-error *ngIf="false">
-        <!--{{registerFormGroup.get('email').hasError('email') ? 'Please enter a valid email address' : 'Email address is required'}}-->
+      <input matInput placeholder="Email"  formControlName="email">
+      <mat-error *ngIf="!isEmailValid()">
+        {{registerFormGroup.get('email').hasError('email') ? 'Please enter a valid email address' : 'Email address is required'}}
       </mat-error>
     </mat-form-field>
     <mat-form-field class="inputs">
-      <input matInput placeholder="Password" [type]="hidePassword ? 'password' : 'text'">
+      <input matInput placeholder="Password" formControlName="password" [type]="hidePassword ? 'password' : 'text'">
       <mat-icon matSuffix class="clicable" (click)="hidePassword = !hidePassword">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-      <mat-error *ngIf="false">
-        <!--{{registerFormGroup.get('password').hasError('required') ? 'Password required' : 'Password length should be at least 6 characters'}}-->
+      <mat-error *ngIf="!isPasswordValid()">
+        {{registerFormGroup.get('password').hasError('required') ? 'Password required' : 'Password length should be at least 6 characters'}}
       </mat-error>
     </mat-form-field>
     <mat-form-field class="inputs">
-      <input matInput placeholder="Repeat password" [type]="hidePasswordRepeat ? 'password' : 'text'">
+      <input matInput placeholder="Repeat password" formControlName="repeatPassword" [type]="hidePasswordRepeat ? 'password' : 'text'" [errorStateMatcher]="repeatPasswordMatcher">
       <mat-icon matSuffix class="clicable" (click)="hidePasswordRepeat = !hidePasswordRepeat">{{hidePasswordRepeat ? 'visibility_off' : 'visibility'}}</mat-icon>
-      <mat-error *ngIf="false">
+      <mat-error *ngIf="registerFormGroup.hasError('notSame')">
         Passwords do not match
       </mat-error>
     </mat-form-field>
     <div class="field"
-         [style.margin-top]="false ? '10px' : '0px'">
+         [style.margin-top]="registerFormGroup.hasError('notSame') ? '10px' : '0px'">
       <div class="buttons-section">
         <button mat-flat-button
                 color="primary"
                 class="register-button"
-                [disabled]="false">Register<mat-spinner *ngIf="false" class="spinner" [diameter]="20"></mat-spinner></button>
+                (click)="onRegisterClicked()"
+                [disabled]="!registerFormGroup.valid || isFetching">{{ isFetching ? '' : 'Register'}}<mat-spinner *ngIf="isFetching" class="spinner" [diameter]="20"></mat-spinner></button>
         <span class="or">Or</span>
         <button mat-stroked-button (click)="onSignInClicked()">Sign in here</button>
       </div>
-      <mat-error *ngIf="false" class="back-section">
-        <!--{{error$ | async}}-->
+      <mat-error *ngIf="error && formSubmitted" class="back-section">
+        {{error}}
       </mat-error>
     </div>
   </form>
@@ -55,6 +57,7 @@
     <span class="header">Success</span>
     <span class="mat-subheading-2 subheading">Verify your email address to finish registration</span>
     <button mat-flat-button
-            color="primary">Go back</button>
+            color="primary"
+            (click)="onCloseDialogClicked()">Go back</button>
   </div>
 </ng-template>

@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {RegisterPageComponent} from './register-page.component';
-import {Location} from '@angular/common';
+import {Router} from '@angular/router';
 
 @Component({
   template: ''
 })
 export class RegisterPageEntryComponent {
   constructor(private dialogService: MatDialog,
-              private location: Location) {
+              private router: Router) {
     this.openDialog();
   }
 
@@ -21,7 +21,7 @@ export class RegisterPageEntryComponent {
 
     dialogRef.afterClosed().subscribe( result => {
       if (!result || !result.blockNavBack) {
-        this.location.back();
+        this.router.navigate(['landing']);
       }
     });
   }
