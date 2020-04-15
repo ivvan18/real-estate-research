@@ -21,14 +21,14 @@
     </mat-form-field>
     <mat-form-field class="inputs">
       <input matInput placeholder="Password" formControlName="password" [type]="hidePassword ? 'password' : 'text'">
-      <mat-icon matSuffix class="clicable" (click)="hidePassword = !hidePassword">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+      <mat-icon matSuffix class="clickable" (click)="hidePassword = !hidePassword">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
       <mat-error *ngIf="!isPasswordValid()">
         {{registerFormGroup.get('password').hasError('required') ? 'Password required' : 'Password length should be at least 6 characters'}}
       </mat-error>
     </mat-form-field>
     <mat-form-field class="inputs">
       <input matInput placeholder="Repeat password" formControlName="repeatPassword" [type]="hidePasswordRepeat ? 'password' : 'text'" [errorStateMatcher]="repeatPasswordMatcher">
-      <mat-icon matSuffix class="clicable" (click)="hidePasswordRepeat = !hidePasswordRepeat">{{hidePasswordRepeat ? 'visibility_off' : 'visibility'}}</mat-icon>
+      <mat-icon matSuffix class="clickable" (click)="hidePasswordRepeat = !hidePasswordRepeat">{{hidePasswordRepeat ? 'visibility_off' : 'visibility'}}</mat-icon>
       <mat-error *ngIf="registerFormGroup.hasError('notSame')">
         Passwords do not match
       </mat-error>

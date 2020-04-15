@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import {SignInPageComponent} from './sign-in-page.component';
 import {MatDialog} from '@angular/material/dialog';
-import {Location} from '@angular/common';
+import {Router} from '@angular/router';
 
 @Component({
   template: '',
 })
 export class SignInPageEntryComponent {
   constructor(private dialogService: MatDialog,
-              private location: Location) {
+              private router: Router) {
     this.openDialog();
   }
 
@@ -21,7 +21,7 @@ export class SignInPageEntryComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (!result || !result.blockNavBack) {
-        this.location.back();
+        this.router.navigate(['landing']);
       }
     });
   }
