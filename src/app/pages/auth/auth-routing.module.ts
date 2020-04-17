@@ -4,6 +4,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {AuthComponent} from './auth.component';
 import {SignInPageEntryComponent} from './sign-in-page/sign-in-page-entry.component';
 import {RegisterPageEntryComponent} from './register-page/register-page-entry.component';
+import {ChangePasswordPageEntryComponent} from './change-password-page/change-password-page-entry.component';
 
 const routes: Routes = [
   {
@@ -12,7 +13,8 @@ const routes: Routes = [
     children: [
       {path: '', redirectTo: 'sign-in'},
       {path: 'sign-in', component: SignInPageEntryComponent},
-      {path: 'register', component: RegisterPageEntryComponent}
+      {path: 'register', component: RegisterPageEntryComponent},
+      {path: 'change-password', component: ChangePasswordPageEntryComponent}
     ]
   }
 ];

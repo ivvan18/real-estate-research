@@ -151,11 +151,11 @@ export class AuthService {
   }
 
   forgotPassword(email: string): Observable<any> {
-    return this.http.post(this.authUrl + '/password/forgot', {email: email});
+    return this.http.post(this.authUrl + '/password/forgot', {email});
   }
 
-  resetPasswordViaEmail(token: string, new_password: string): Observable<any>  {
-    return this.http.post(this.authUrl + '/password/forgot/reset/' + token, {new_password: new_password}).pipe(
+  resetPasswordViaEmail(token: string, newPassword: string): Observable<any>  {
+    return this.http.post(this.authUrl + '/password/forgot/reset/' + token, {new_password: newPassword}).pipe(
       map((response: any) => {
         console.log(response);
         this.saveUserTokens(response[this.accessTokenKey], response[this.refreshTokenKey]);
@@ -167,7 +167,7 @@ export class AuthService {
     );
   }
 
-  changePassword(current_password: string, password: string) {
-    return this.http.post(this.authUrl + '/password/change', {current_password: current_password, new_password: password});
+  changePassword(currentPassword: string, password: string) {
+    return this.http.post(this.authUrl + '/password/change', {current_password: currentPassword, new_password: password});
   }
 }

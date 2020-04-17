@@ -19,6 +19,8 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {RouterModule} from '@angular/router';
+import { ChangePasswordPageComponent } from './change-password-page/change-password-page.component';
+import { ChangePasswordPageEntryComponent } from './change-password-page/change-password-page-entry.component';
 
 const MAT_MODULES = [
   MatDialogModule,
@@ -35,7 +37,15 @@ const MAT_MODULES = [
 ];
 
 @NgModule({
-  declarations: [SignInPageComponent, RegisterPageComponent, SignInPageEntryComponent, RegisterPageEntryComponent, AuthComponent],
+  declarations: [
+    SignInPageComponent,
+    RegisterPageComponent,
+    SignInPageEntryComponent,
+    RegisterPageEntryComponent,
+    AuthComponent,
+    ChangePasswordPageComponent,
+    ChangePasswordPageEntryComponent
+  ],
   imports: [
     CommonModule,
     AuthRoutingModule,
@@ -44,6 +54,6 @@ const MAT_MODULES = [
     FormsModule,
     ReactiveFormsModule
   ],
-  entryComponents: [SignInPageComponent, RegisterPageComponent]
+  entryComponents: [SignInPageComponent, RegisterPageComponent, ChangePasswordPageComponent]
 })
 export class AuthModule { }
