@@ -10,9 +10,18 @@
     <div class="nav-item">
       <strong class="nav-item">Research</strong>
     </div>
-    <div class="nav-item">
+    <div [matMenuTriggerFor]="menu" *ngIf="user" class="nav-item profile">
       <mat-icon>person</mat-icon>
       <strong class="nav-item">&nbsp; My Account</strong>
     </div>
   </div>
 </div>
+
+<mat-menu #menu="matMenu">
+  <ng-container *ngIf="user">
+    <div mat-menu-item class="non-clickable">{{user.username}}</div>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="navigate('auth/change-password')">Change password</button>
+    <button mat-menu-item (click)="onLogoutClicked()">Logout</button>
+  </ng-container>
+</mat-menu>

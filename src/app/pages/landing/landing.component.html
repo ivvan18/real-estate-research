@@ -11,7 +11,7 @@
       <div class="feature-item"><mat-icon class="warning right-margin">check</mat-icon> User customizations</div>
       <div class="feature-item"><mat-icon class="warning right-margin">check</mat-icon> Different price predictions</div>
 
-      <div class="buttons">
+      <div *ngIf="!user" class="buttons">
         <button mat-raised-button class="action-button" (click)="navigate('auth/sign-in')">SIGN IN</button>
         <button mat-raised-button class="action-button background-warning" (click)="navigate('auth/register')">REGISTER</button>
       </div>

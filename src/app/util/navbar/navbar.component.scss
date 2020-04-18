@@ -21,13 +21,14 @@
 
 .nav-item {
   display: flex;
+  align-items: center;
 }
 
 .nav-item:nth-child(n) {
   margin-right: 40px;
 }
 
-.nav-item:last-child {
+.profile {
   margin: 0 0 0 auto;
 }
 

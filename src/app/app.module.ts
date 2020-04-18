@@ -8,8 +8,10 @@ import {MatIconModule} from '@angular/material/icon';
 import { NavbarComponent } from './util/navbar/navbar.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {JwtInterceptor} from './api/jwt.interceptor';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatDividerModule} from '@angular/material/divider';
 
-const MatModules = [MatIconModule];
+const MatModules = [MatIconModule, MatMenuModule, MatDividerModule];
 
 @NgModule({
   declarations: [
