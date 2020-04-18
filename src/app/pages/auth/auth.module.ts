@@ -21,6 +21,8 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {RouterModule} from '@angular/router';
 import { ChangePasswordPageComponent } from './change-password-page/change-password-page.component';
 import { ChangePasswordPageEntryComponent } from './change-password-page/change-password-page-entry.component';
+import { RestorePasswordPageComponent } from './restore-password-page/restore-password-page.component';
+import { RestorePasswordPageEntryComponent } from './restore-password-page/restore-password-page-entry.component';
 
 const MAT_MODULES = [
   MatDialogModule,
@@ -44,7 +46,9 @@ const MAT_MODULES = [
     RegisterPageEntryComponent,
     AuthComponent,
     ChangePasswordPageComponent,
-    ChangePasswordPageEntryComponent
+    ChangePasswordPageEntryComponent,
+    RestorePasswordPageComponent,
+    RestorePasswordPageEntryComponent
   ],
   imports: [
     CommonModule,
@@ -54,6 +58,6 @@ const MAT_MODULES = [
     FormsModule,
     ReactiveFormsModule
   ],
-  entryComponents: [SignInPageComponent, RegisterPageComponent, ChangePasswordPageComponent]
+  entryComponents: [SignInPageComponent, RegisterPageComponent, ChangePasswordPageComponent, RestorePasswordPageComponent]
 })
 export class AuthModule { }

@@ -1,33 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {Router} from '@angular/router';
-import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
-import {ErrorStateMatcher} from '@angular/material/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {AuthService} from '../services/auth.service';
 import {takeUntil} from 'rxjs/operators';
-
-function checkPasswords(group: FormGroup) {
-  const pass = group.controls.password.value;
-  const confirmPass = group.controls.repeatPassword.value;
-
-  return pass === confirmPass ? null : {notSame: true};
-}
-
-export class RepeatPasswordMatcher implements ErrorStateMatcher {
-  isErrorState(
-    control: FormControl | null,
-    form: FormGroupDirective | NgForm | null
-  ): boolean {
-    const invalidRepeatPassword = !!(
-      control &&
-      control.parent &&
-      control.parent.hasError('notSame')
-    );
-
-    return invalidRepeatPassword;
-  }
-}
+import {checkPasswords, RepeatPasswordMatcher} from '../util/util';
 
 @Component({
   selector: 'app-register-page',
