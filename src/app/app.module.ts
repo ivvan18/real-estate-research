@@ -4,26 +4,23 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatIconModule} from '@angular/material/icon';
-import { NavbarComponent } from './util/navbar/navbar.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {JwtInterceptor} from './api/jwt.interceptor';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatDividerModule} from '@angular/material/divider';
-
-const MatModules = [MatIconModule, MatMenuModule, MatDividerModule];
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {UtilModule} from './util/util.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    NavbarComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatModules,
-    HttpClientModule
+    ReactiveFormsModule,
+    FormsModule,
+    HttpClientModule,
+    UtilModule
   ],
   providers: [
     {

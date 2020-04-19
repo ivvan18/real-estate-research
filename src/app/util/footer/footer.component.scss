@@ -1,0 +1,37 @@
+.footer-section {
+  background-color: #212121;
+  color: #fff!important;
+}
+
+.footer-container {
+  margin: 0 auto;
+  padding: 0 100px;
+  display: flex;
+  flex-direction: row;
+}
+
+.footer-child {
+  padding: 30px;
+  box-shadow: 3px 0 4px rgba(0,0,0,.2);
+}
+
+.footer-child:first-child {
+  padding-left: 0;
+}
+
+.footer-child-title {
+  position: relative;
+  margin: 0 0 24px;
+  padding-bottom: 12px;
+  font-size: 1.25rem;
+}
+
+.footer-child-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 64px;
+  background-color: #ffc107;
+}

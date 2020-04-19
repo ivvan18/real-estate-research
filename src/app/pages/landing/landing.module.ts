@@ -7,6 +7,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {UtilModule} from '../../util/util.module';
 
 const MatModules = [MatIconModule, MatButtonModule, MatInputModule, MatFormFieldModule];
 
@@ -17,7 +18,8 @@ const MatModules = [MatIconModule, MatButtonModule, MatInputModule, MatFormField
     LandingRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    MatModules
+    MatModules,
+    UtilModule
   ]
 })
 export class LandingModule { }

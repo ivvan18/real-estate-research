@@ -1,2 +1,42 @@
 <div class="background">
+  <div class="search-container">
+    <h1 class="search-header">Find out predictable payoff period</h1>
+    <div class="search-section">
+      <mat-form-field class="address" appearance="fill">
+        <mat-label>Address</mat-label>
+        <input matInput>
+      </mat-form-field>
+      <mat-form-field class="util" appearance="fill">
+        <mat-label>Number of rooms</mat-label>
+        <mat-select>
+          <mat-option value="option">1</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="util" appearance="fill">
+        <mat-label>Square</mat-label>
+        <input matInput>
+      </mat-form-field>
+      <mat-form-field class="util" appearance="fill">
+        <mat-label>Floor</mat-label>
+        <input matInput>
+      </mat-form-field>
+    </div>
+    <div class="search-button-section">
+      <button class="background-warning util" mat-raised-button>Search</button>
+    </div>
+  </div>
 </div>
+<div class="result-container">
+  <div class="map-container">
+    <mat-spinner *ngIf="estatesLoading" class="spinner" [diameter]="150"></mat-spinner>
+    <angular-yandex-map *ngIf="!estatesLoading" [center]="[estates[0].latitude, estates[0].longitude]" [zoom]="9">
+      <angular-yandex-placemark *ngFor="let estate of estates"
+                                [geometry]="[estate.latitude, estate.longitude]"
+                                (yaclick)="onEstatePlacemarkClicked(estate.id)"
+      ></angular-yandex-placemark>
+    </angular-yandex-map>
+  </div>
+  <div class="results">
+  </div>
+</div>
+<app-footer></app-footer>
