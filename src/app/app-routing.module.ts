@@ -11,6 +11,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/auth/auth.module').then(auth => auth.AuthModule)
   },
   {
+    path: 'search',
+    loadChildren: () => import('./pages/estate-search/estate-search.module').then(estate => estate.EstateSearchModule)
+  },
+  {
     path: '**',
     redirectTo: 'landing'
   }

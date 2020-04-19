@@ -1,11 +1,15 @@
-<div [ngClass]="{'navbar-fixed': isFixed, 'container': !isFixed }">
+<div class="navbar-relative" [ngClass]="{'navbar-fixed': isFixed, 'container': !isFixed }">
   <div class="inner-container">
-    <div class="nav-item">
+    <div
+      class="nav-item"
+      (click)="navigate('landing')">
       <img src="../../../assets/navbar/apartment-icon.png" class="icon">
       <strong>&nbsp; Restch</strong>
     </div>
-    <div class="nav-item">
-      <strong>MarketPlace</strong>
+    <div
+      class="nav-item"
+      (click)="navigate('search')">
+      <strong>Search</strong>
     </div>
     <div class="nav-item">
       <strong class="nav-item">Research</strong>
