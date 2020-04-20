@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import {AuthGuardService} from './guards/auth-guard.service';
 
 const routes: Routes = [
   {
@@ -12,7 +13,12 @@ const routes: Routes = [
   },
   {
     path: 'search',
-    loadChildren: () => import('./pages/estate-search/estate-search.module').then(estate => estate.EstateSearchModule)
+    loadChildren: () => import('./pages/estate-search/estate-search.module').then(estate => estate.EstateSearchModule),
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'estate/:id',
+    loadChildren: () => import('./pages/estate-item/estate-item.module').then(estate => estate.EstateItemModule)
   },
   {
     path: '**',

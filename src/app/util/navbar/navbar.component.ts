@@ -30,7 +30,7 @@ export class NavbarComponent implements OnInit {
   onLogoutClicked() {
     this.auth.logout().subscribe(response => {
       console.log('Logout completed: ', response);
-      this.router.navigate(['landing']);
+      this.router.navigate(['auth/sign-in']);
     });
   }
 }

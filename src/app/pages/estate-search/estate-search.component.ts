@@ -32,10 +32,8 @@ export class EstateSearchComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-
   onEstatePlacemarkClicked(estateId: number) {
     const estateClicked = this.estates.find(estate => estate.id === estateId);
     console.log('Clicked on estate: ', estateClicked);
   }
-
 }

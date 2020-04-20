@@ -1,10 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-
+import { EstateItemComponent } from './estate-item.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [EstateItemComponent],
   imports: [
     CommonModule
   ]

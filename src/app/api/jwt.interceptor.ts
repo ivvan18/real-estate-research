@@ -83,7 +83,7 @@ export class JwtInterceptor implements HttpInterceptor {
     //   .logout()
     //   .subscribe(() => this.router.navigate(['auth/login']));
 
-    this.router.navigate(['auth/login']);
+    this.router.navigate(['auth/sign-in']);
   }
 
   private addTokenRequest(request: HttpRequest<any>): HttpRequest<any> {
