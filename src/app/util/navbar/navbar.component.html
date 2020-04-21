@@ -11,7 +11,9 @@
       (click)="navigate('search')">
       <strong>Search</strong>
     </div>
-    <div class="nav-item">
+    <div
+      class="nav-item"
+      (click)="navigate('estate/123123')">
       <strong class="nav-item">Research</strong>
     </div>
     <div [matMenuTriggerFor]="menu" *ngIf="user" class="nav-item profile">

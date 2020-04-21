@@ -1,1 +1,49 @@
-<p>estate-item works!</p>
+<div *ngIf="isFetching" class="loader">
+  <mat-spinner [diameter]="200"></mat-spinner>
+</div>
+
+<div *ngIf="!isFetching" class="estate-item-container">
+  <mat-card *ngIf="estate" class="left-card">
+    <mat-card-header>
+      <mat-card-title>{{estate.rooms_count}}-комн. квартира, {{estate.area}} м&#178;</mat-card-title>
+      <mat-card-subtitle>{{estate.address}}</mat-card-subtitle>
+      <mat-card-subtitle>м. {{estate.metro}}</mat-card-subtitle>
+    </mat-card-header>
+    <div class="pictures-container">
+      <ngx-gallery [options]="galleryOptions" [images]="galleryImages" class="ngx-gallery"></ngx-gallery>
+    </div>
+    <mat-card-header>
+      <mat-card-subtitle>{{estate.floor_number}} этаж, {{estate.floors_count}}-этажный дом</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        Тут будет описание
+      </p>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="right-card-section">
+    <mat-card *ngIf="estate" class="price-card">
+      <mat-card-header>
+        <mat-card-title>{{estate.price}} &#8381;</mat-card-title>
+        <mat-card-subtitle>Телефон: {{estate.phone}}</mat-card-subtitle>
+        <mat-card-subtitle>
+          <button mat-raised-button color="primary">Перейти на ЦИАН</button>
+        </mat-card-subtitle>
+      </mat-card-header>
+    </mat-card>
+    <mat-card *ngIf="estate" class="map-card">
+      <mat-card-header>
+        <mat-card-title>Расположение на карте</mat-card-title>
+      </mat-card-header>
+      <div class="map-container">
+        <angular-yandex-map [center]="[estate.latitude, estate.longitude]" [zoom]="9">
+          <angular-yandex-placemark
+            [geometry]="[estate.latitude, estate.longitude]"
+          ></angular-yandex-placemark>
+        </angular-yandex-map>
+      </div>
+    </mat-card>
+  </div>
+</div>
+

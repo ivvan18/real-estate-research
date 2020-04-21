@@ -40,3 +40,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .non-clickable {
   cursor: default !important;
 }
+
+.mat-sidenav-container, .mat-sidenav-content, .mat-tab-body-content {
+  transform: none !important;
+}

@@ -19,7 +19,7 @@ export class NavbarComponent implements OnInit {
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
-    this.isFixed = document.body.scrollTop > 40 || document.documentElement.scrollTop > 40;
+    this.isFixed = document.body.scrollTop > 20 || document.documentElement.scrollTop > 20;
     this.cd.markForCheck();
   }
 

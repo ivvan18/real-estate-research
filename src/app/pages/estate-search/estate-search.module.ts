@@ -22,7 +22,7 @@ const MatModules = [MatButtonModule, MatInputModule, MatFormFieldModule, MatSele
     MatModules,
     ReactiveFormsModule,
     FormsModule,
-    UtilModule
+    UtilModule,
   ]
 })
 export class EstateSearchModule { }
