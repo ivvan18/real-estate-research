@@ -20,36 +20,51 @@
   </div>
 </div>
 
-<div class="sending-section">
+<div #feedback class="sending-section">
   <div class="sending-form full-height">
     <div class="sending-form-header">
       <h2>Send Us An Email</h2>
       <p>If you have problems or questions please contact us</p>
     </div>
-    <form class="form-send">
+    <form class="form-send" [formGroup]="feedbackFormGroup">
       <mat-form-field class="full-width">
         <mat-label>Your name</mat-label>
-        <input matInput>
+        <input matInput formControlName="name">
+        <mat-error *ngIf="feedbackFormGroup.get('name').hasError('required')">
+          Name is required
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field class="full-width">
         <mat-label>Your email</mat-label>
-        <input matInput>
+        <input matInput formControlName="email">
+        <mat-error *ngIf="!isfeedBackEmailValid()">
+          {{feedbackFormGroup.get('email').hasError('email') ? 'Please enter a valid email address' : 'Email address is required'}}
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field class="full-width">
         <mat-label>Subject</mat-label>
-        <input matInput>
+        <input matInput formControlName="subject">
+        <mat-error *ngIf="feedbackFormGroup.get('subject').hasError('required')">
+          Subject is required
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field class="full-width">
-        <textarea matInput placeholder="Message"></textarea>
+        <textarea matInput placeholder="Message" formControlName="message"></textarea>
+        <mat-error *ngIf="feedbackFormGroup.get('message').hasError('required')">
+          Message is required
+        </mat-error>
       </mat-form-field>
 
-      <button mat-fab color="primary">
-        <mat-icon>send</mat-icon>
+      <button mat-fab color="primary" class="send-feedback-button"
+              [disabled]="!feedbackFormGroup.valid || feedbackIsFetching"
+              (click)="onSendFeedbackClicked()">
+        <mat-spinner *ngIf="feedbackIsFetching" class="spinner" [diameter]="20"></mat-spinner>
+        <mat-icon *ngIf="!feedbackIsFetching">send</mat-icon>
       </button>
     </form>
   </div>
 </div>
-<app-footer></app-footer>
+<app-footer (contact)="onContactClicked()"></app-footer>

@@ -1,8 +1,9 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, NgZone, OnDestroy, OnInit} from '@angular/core';
 import {RestService} from '../../services/rest.service';
 import {finalize, takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-estate-search',
@@ -17,6 +18,8 @@ export class EstateSearchComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject();
 
   constructor(private rest: RestService,
+              private ngZone: NgZone,
+              private router: Router,
               private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
@@ -48,7 +51,10 @@ export class EstateSearchComponent implements OnInit, OnDestroy {
   }
 
   onEstatePlacemarkClicked(estateId: number) {
-    const estateClicked = this.estates.find(estate => estate.id === estateId);
-    console.log('Clicked on estate: ', estateClicked);
+    this.ngZone.run(() => this.router.navigate(['estate', estateId]));
+  }
+
+  navigate(url: string) {
+    this.router.navigate([url]);
   }
 }

@@ -74,7 +74,7 @@
 }
 
 .sending-section {
-  background: rgba(0,0,0,.024);
+  background: #ffffff;
   padding: 80px 0;
   color: rgba(0,0,0,.87);
 }
@@ -140,4 +140,15 @@
   height: 2px;
   width: 64px;
   background-color: #ffc107;
+}
+
+.send-feedback-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .spinner {
+    opacity: 1;
+    transition: opacity .3s ease-in-out;
+  }
 }

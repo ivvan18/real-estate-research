@@ -14,4 +14,5 @@ export interface IEstate {
   city: string;
   latitude: number;
   longitude: number;
+  description: string;
 }

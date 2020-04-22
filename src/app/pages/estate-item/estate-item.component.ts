@@ -4,6 +4,7 @@ import {RestService} from '../../services/rest.service';
 import {NgxGalleryAnimation, NgxGalleryImage, NgxGalleryOptions } from '@kolkov/ngx-gallery';
 import {IEstate} from '../../models/IEstate';
 import {finalize, takeUntil} from 'rxjs/operators';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-estate-item',
@@ -13,60 +14,72 @@ import {finalize, takeUntil} from 'rxjs/operators';
 export class EstateItemComponent implements OnInit, OnDestroy {
   isFetching = true;
   estate: IEstate;
+  estateId: number;
 
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
 
   private readonly destroy$ = new Subject();
 
-  constructor(private rest: RestService) { }
+  constructor(private rest: RestService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.rest.getEntities('filter', {fl: 9, rms: 2, sq: 42})
-      .pipe(
-        takeUntil(this.destroy$),
-        finalize(() => this.isFetching = false)
-      )
-      .subscribe(result => {
-        console.log('Result: ', result);
-        const images = result[0].images.split(',');
-        this.estate = result[0];
+    this.route.params
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        this.estateId = params.id;
+        console.log('EstateId: ', this.estateId);
 
-        console.log('images: ', images);
-        this.galleryOptions = [
-          {
-            width: '600px',
-            height: '400px',
-            thumbnailsColumns: 4,
-            imageAnimation: NgxGalleryAnimation.Slide
-          },
-          // max-width 800
-          {
-            breakpoint: 800,
-            width: '100%',
-            height: '600px',
-            imagePercent: 80,
-            thumbnailsPercent: 20,
-            thumbnailsMargin: 20,
-            thumbnailMargin: 20
-          },
-          // max-width 400
-          {
-            breakpoint: 400,
-            preview: false
-          }
-        ];
+        this.rest.getEntityById('realty', this.estateId)
+          .pipe(
+            takeUntil(this.destroy$),
+            finalize(() => this.isFetching = false)
+          )
+          .subscribe(result => {
+            console.log('Result: ', result);
+            const images = result.realty.images.split(',');
+            this.estate = result.realty;
 
-        this.galleryImages = images.map(img => ({
-          small: img,
-          medium: img,
-          big: img
-        }));
+            console.log('images: ', images);
+            this.galleryOptions = [
+              {
+                width: '600px',
+                height: '400px',
+                thumbnailsColumns: 4,
+                imageAnimation: NgxGalleryAnimation.Slide
+              },
+              // max-width 800
+              {
+                breakpoint: 800,
+                width: '100%',
+                height: '600px',
+                imagePercent: 80,
+                thumbnailsPercent: 20,
+                thumbnailsMargin: 20,
+                thumbnailMargin: 20
+              },
+              // max-width 400
+              {
+                breakpoint: 400,
+                preview: false
+              }
+            ];
+
+            this.galleryImages = images.map(img => ({
+              small: img,
+              medium: img,
+              big: img
+            }));
+          });
       });
   }
 
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  onCianLinkClicked() {
+    window.open(this.estate.url, '_blank');
   }
 }
