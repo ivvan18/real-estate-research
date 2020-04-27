@@ -4,7 +4,7 @@ import {RestService} from '../../services/rest.service';
 import {NgxGalleryAnimation, NgxGalleryImage, NgxGalleryOptions } from '@kolkov/ngx-gallery';
 import {IEstate} from '../../models/IEstate';
 import {finalize, takeUntil} from 'rxjs/operators';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-estate-item',
@@ -21,7 +21,9 @@ export class EstateItemComponent implements OnInit, OnDestroy {
 
   private readonly destroy$ = new Subject();
 
-  constructor(private rest: RestService, private route: ActivatedRoute) { }
+  constructor(private rest: RestService,
+              private route: ActivatedRoute,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.route.params
@@ -81,5 +83,9 @@ export class EstateItemComponent implements OnInit, OnDestroy {
 
   onCianLinkClicked() {
     window.open(this.estate.url, '_blank');
+  }
+
+  navigate(url: string) {
+    this.router.navigate([url]);
   }
 }

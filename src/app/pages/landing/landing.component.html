@@ -64,6 +64,9 @@
         <mat-spinner *ngIf="feedbackIsFetching" class="spinner" [diameter]="20"></mat-spinner>
         <mat-icon *ngIf="!feedbackIsFetching">send</mat-icon>
       </button>
+      <mat-error *ngIf="feedbackError && feedbackFormSubmitted">
+        {{feedbackError}}
+      </mat-error>
     </form>
   </div>
 </div>

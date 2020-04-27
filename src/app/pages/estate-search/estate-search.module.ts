@@ -10,6 +10,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatSelectModule} from '@angular/material/select';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {UtilModule} from '../../util/util.module';
+import {Ng5SliderModule} from 'ng5-slider';
 
 const MatModules = [MatButtonModule, MatInputModule, MatFormFieldModule, MatSelectModule, MatProgressSpinnerModule];
 
@@ -23,6 +24,7 @@ const MatModules = [MatButtonModule, MatInputModule, MatFormFieldModule, MatSele
     ReactiveFormsModule,
     FormsModule,
     UtilModule,
+    Ng5SliderModule
   ]
 })
 export class EstateSearchModule { }

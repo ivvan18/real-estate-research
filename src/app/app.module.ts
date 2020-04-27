@@ -8,6 +8,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {JwtInterceptor} from './api/jwt.interceptor';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {UtilModule} from './util/util.module';
+import {AngularYandexMapsModule} from 'angular8-yandex-maps';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import {UtilModule} from './util/util.module';
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
-    UtilModule
+    UtilModule,
+    AngularYandexMapsModule.forRoot('ecb1f0ef-f037-4dac-99b8-6ff3115f4303')
   ],
   providers: [
     {

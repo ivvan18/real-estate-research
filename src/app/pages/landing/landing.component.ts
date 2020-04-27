@@ -68,7 +68,7 @@ export class LandingComponent implements OnInit, OnDestroy {
     this.feedbackError = '';
 
     console.log('onSendFeedbackClicked: ', this.feedbackFormGroup.getRawValue());
-    this.rest.postEntity('feedback', { body: this.feedbackFormGroup.getRawValue()})
+    this.rest.postEntity('feedback', this.feedbackFormGroup.getRawValue())
       .pipe(
         takeUntil(this.destroy$),
       )
@@ -76,12 +76,12 @@ export class LandingComponent implements OnInit, OnDestroy {
         value => {
           console.log('Feedback Success: ', value);
           this.feedbackIsFetching = false;
-          this.openSnackBar('Feedback successfully sent.', 'Ok');
+          this.openSnackBar(value.message, 'Ok');
         },
         error => {
           console.log('Feedback Error: ', error);
           this.feedbackIsFetching = false;
-          this.feedbackError = error.error.message;
+          this.feedbackError = error.error.message.name;
         });
   }
 
