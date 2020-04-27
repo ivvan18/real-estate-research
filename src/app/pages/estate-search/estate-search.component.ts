@@ -105,7 +105,7 @@ export class EstateSearchComponent implements OnInit, OnDestroy {
 
   onEstatePlacemarkClicked(url: string) {
     const strings = url.split('/');
-    this.router.navigate(['estate', strings[strings.length - 1]]);
+    this.router.navigate([]).then(() => { window.open('/estate/' + strings[strings.length - 1], '_blank'); });
   }
 
   navigate(url: string) {

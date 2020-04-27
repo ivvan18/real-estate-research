@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  restUrl: '/api'
+  restUrl: '/api',
+  deployUrl: 'localhost:5000'
 };
 
 /*
