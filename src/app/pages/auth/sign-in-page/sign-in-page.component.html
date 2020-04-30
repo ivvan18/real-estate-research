@@ -1,22 +1,22 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <h1 class = "mat-h1">Sign in</h1>
+    <h1 class = "mat-h1">Вход</h1>
   </mat-toolbar-row>
 </mat-toolbar>
 
 <form class="sign-in-form"
       [formGroup]="signInFormGroup">
   <mat-form-field class="inputs">
-    <input matInput placeholder="Username" formControlName="username">
+    <input matInput placeholder="Имя" formControlName="username">
     <mat-error *ngIf="!isUsernameValid()">
-      {{signInFormGroup.get('username').hasError('username') ? 'Please enter a valid username' : 'Username is required'}}
+      {{signInFormGroup.get('username').hasError('username') ? 'Пожалуйста введите действительное имя' : 'Имя обязательно'}}
     </mat-error>
   </mat-form-field>
   <mat-form-field class="inputs">
-    <input matInput placeholder="Password" formControlName="password" [type]="hidePassword ? 'password' : 'text'">
+    <input matInput placeholder="Пароль" formControlName="password" [type]="hidePassword ? 'password' : 'text'">
     <mat-icon matSuffix class="clickable" (click)="hidePassword = !hidePassword">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
     <mat-error *ngIf="signInFormGroup.get('password').hasError('required')">
-      Password is required
+      Пароль обязателен
     </mat-error>
   </mat-form-field>
   <div class="field">
@@ -26,18 +26,18 @@
               class="sign-in-button"
               [disabled]="!signInFormGroup.valid || isFetching"
               (click)="onSignInClicked()">
-        {{ isFetching ? '' : 'Sign in'}}
+        {{ isFetching ? '' : 'Вход'}}
         <mat-spinner *ngIf="isFetching" class="spinner" [diameter]="20"></mat-spinner>
       </button>
-      <span class="or">Or</span>
-      <button mat-stroked-button (click)="onRegisterClicked()">Register here</button>
+      <span class="or">Или</span>
+      <button mat-stroked-button (click)="onRegisterClicked()">Регистрация</button>
     </div>
     <mat-error *ngIf="error && formSubmitted" class="back-section">
       {{error}}
     </mat-error>
     <div class="mat-subheading-2 restore-section">
-      <div>Forgot password?&nbsp;</div>
-      <div><span class="primary-color clickable" (click)="onRestorePasswordClicked()">Restore</span> it here</div>
+      <div>Не помните?&nbsp;</div>
+      <div><span class="primary-color clickable" (click)="onRestorePasswordClicked()">Восстановление</span></div>
     </div>
   </div>
 </form>

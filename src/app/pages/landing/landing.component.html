@@ -2,18 +2,18 @@
   <div class="padding picture-container full-height">
     <div class="headers-container">
       <div class="main-header">
-        Real estate research platform
+        Платформа по анализу рынка недвижимости
       </div>
       <div class="sub-header">
-        Study market, find profitable options, invest your money in a smart way!
+        Изучайте рынок, находите варианты, инвестируйте правильно!
       </div>
-      <div class="feature-item"><mat-icon class="warning right-margin">check</mat-icon> Flexible search system</div>
-      <div class="feature-item"><mat-icon class="warning right-margin">check</mat-icon> User customizations</div>
-      <div class="feature-item"><mat-icon class="warning right-margin">check</mat-icon> Different price predictions</div>
+      <div class="feature-item"><mat-icon class="warning right-margin">check</mat-icon> Гибкая система поиска</div>
+      <div class="feature-item"><mat-icon class="warning right-margin">check</mat-icon> Кастомизация профиля</div>
+      <div class="feature-item"><mat-icon class="warning right-margin">check</mat-icon> Различные ценновые предсказания</div>
 
       <div *ngIf="!user" class="buttons">
-        <button mat-raised-button class="action-button" (click)="navigate('auth/sign-in')">SIGN IN</button>
-        <button mat-raised-button class="action-button background-warning" (click)="navigate('auth/register')">REGISTER</button>
+        <button mat-raised-button class="action-button" (click)="navigate('auth/sign-in')">ВХОД</button>
+        <button mat-raised-button class="action-button background-warning" (click)="navigate('auth/register')">РЕГИСТРАЦИЯ</button>
       </div>
     </div>
     <img src="../../../assets/landing/apartments.png" class="building"/>
@@ -23,38 +23,38 @@
 <div #feedback class="sending-section">
   <div class="sending-form full-height">
     <div class="sending-form-header">
-      <h2>Send Us An Email</h2>
-      <p>If you have problems or questions please contact us</p>
+      <h2>Отправьте нам письмо</h2>
+      <p>Свяжитесь с нами если у вас есть вопросы</p>
     </div>
     <form class="form-send" [formGroup]="feedbackFormGroup">
       <mat-form-field class="full-width">
-        <mat-label>Your name</mat-label>
+        <mat-label>Имя</mat-label>
         <input matInput formControlName="name">
         <mat-error *ngIf="feedbackFormGroup.get('name').hasError('required')">
-          Name is required
+          Имя обязательно
         </mat-error>
       </mat-form-field>
 
       <mat-form-field class="full-width">
-        <mat-label>Your email</mat-label>
+        <mat-label>Почта</mat-label>
         <input matInput formControlName="email">
         <mat-error *ngIf="!isfeedBackEmailValid()">
-          {{feedbackFormGroup.get('email').hasError('email') ? 'Please enter a valid email address' : 'Email address is required'}}
+          {{feedbackFormGroup.get('email').hasError('email') ? 'Пожалуйста введите действительный адрес' : 'Почта обязательна'}}
         </mat-error>
       </mat-form-field>
 
       <mat-form-field class="full-width">
-        <mat-label>Subject</mat-label>
+        <mat-label>Тема</mat-label>
         <input matInput formControlName="subject">
         <mat-error *ngIf="feedbackFormGroup.get('subject').hasError('required')">
-          Subject is required
+          Тема обязательна
         </mat-error>
       </mat-form-field>
 
       <mat-form-field class="full-width">
-        <textarea matInput placeholder="Message" formControlName="message"></textarea>
+        <textarea matInput placeholder="Сообщение" formControlName="message"></textarea>
         <mat-error *ngIf="feedbackFormGroup.get('message').hasError('required')">
-          Message is required
+          Сообщение обязательно
         </mat-error>
       </mat-form-field>
 
@@ -65,7 +65,7 @@
         <mat-icon *ngIf="!feedbackIsFetching">send</mat-icon>
       </button>
       <mat-error *ngIf="feedbackError && feedbackFormSubmitted">
-        {{feedbackError}}
+        Произошла ошибка при отправлении
       </mat-error>
     </form>
   </div>

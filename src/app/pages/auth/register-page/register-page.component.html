@@ -1,36 +1,36 @@
 <div *ngIf="!accessToken; else emailSend">
   <mat-toolbar color="primary">
     <mat-toolbar-row>
-      <h1 class = "mat-h1">Register</h1>
+      <h1 class = "mat-h1">Регистрация</h1>
     </mat-toolbar-row>
   </mat-toolbar>
 
   <form class="sign-in-form"
         [formGroup]="registerFormGroup">
     <mat-form-field class="inputs">
-      <input matInput placeholder="Username" formControlName="username">
+      <input matInput placeholder="Имя" formControlName="username">
       <mat-error *ngIf="registerFormGroup.get('username').hasError('required')">
-        Username is required
+        Имя обязательно
       </mat-error>
     </mat-form-field>
     <mat-form-field class="inputs">
-      <input matInput placeholder="Email"  formControlName="email">
+      <input matInput placeholder="Почта"  formControlName="email">
       <mat-error *ngIf="!isEmailValid()">
-        {{registerFormGroup.get('email').hasError('email') ? 'Please enter a valid email address' : 'Email address is required'}}
+        {{registerFormGroup.get('email').hasError('email') ? 'Пожалуйста введите действительный адрес' : 'Адрес обязателен'}}
       </mat-error>
     </mat-form-field>
     <mat-form-field class="inputs">
-      <input matInput placeholder="Password" formControlName="password" [type]="hidePassword ? 'password' : 'text'">
+      <input matInput placeholder="Пароль" formControlName="password" [type]="hidePassword ? 'password' : 'text'">
       <mat-icon matSuffix class="clickable" (click)="hidePassword = !hidePassword">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
       <mat-error *ngIf="!isPasswordValid()">
-        {{registerFormGroup.get('password').hasError('required') ? 'Password required' : 'Password length should be at least 6 characters'}}
+        {{registerFormGroup.get('password').hasError('required') ? 'Пароль обязателен' : 'Пароль должен содержать не менее 6 символов'}}
       </mat-error>
     </mat-form-field>
     <mat-form-field class="inputs">
-      <input matInput placeholder="Repeat password" formControlName="repeatPassword" [type]="hidePasswordRepeat ? 'password' : 'text'" [errorStateMatcher]="repeatPasswordMatcher">
+      <input matInput placeholder="Повторите пароль" formControlName="repeatPassword" [type]="hidePasswordRepeat ? 'password' : 'text'" [errorStateMatcher]="repeatPasswordMatcher">
       <mat-icon matSuffix class="clickable" (click)="hidePasswordRepeat = !hidePasswordRepeat">{{hidePasswordRepeat ? 'visibility_off' : 'visibility'}}</mat-icon>
       <mat-error *ngIf="registerFormGroup.hasError('notSame')">
-        Passwords do not match
+        Пароли не совпадают
       </mat-error>
     </mat-form-field>
     <div class="field"
@@ -40,9 +40,9 @@
                 color="primary"
                 class="register-button"
                 (click)="onRegisterClicked()"
-                [disabled]="!registerFormGroup.valid || isFetching">{{ isFetching ? '' : 'Register'}}<mat-spinner *ngIf="isFetching" class="spinner" [diameter]="20"></mat-spinner></button>
-        <span class="or">Or</span>
-        <button mat-stroked-button (click)="onSignInClicked()">Sign in here</button>
+                [disabled]="!registerFormGroup.valid || isFetching">{{ isFetching ? '' : 'Регистрация'}}<mat-spinner *ngIf="isFetching" class="spinner" [diameter]="20"></mat-spinner></button>
+        <span class="or">Или</span>
+        <button mat-stroked-button (click)="onSignInClicked()">Вход</button>
       </div>
       <mat-error *ngIf="error && formSubmitted" class="back-section">
         {{error}}
@@ -54,10 +54,10 @@
 <ng-template #emailSend>
   <div class="sign-in-form email-send-container">
     <img src="../../../../assets/auth/check.svg" style="height: 180px">
-    <span class="header">Success</span>
-    <span class="mat-subheading-2 subheading">You have successfully registered in application.</span>
+    <span class="header">Успешно</span>
+    <span class="mat-subheading-2 subheading">Вы успешно зарегистрировались в приложении.</span>
     <button mat-flat-button
             color="primary"
-            (click)="onCloseDialogClicked()">Go back</button>
+            (click)="onCloseDialogClicked()">Назад</button>
   </div>
 </ng-template>

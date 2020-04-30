@@ -76,7 +76,7 @@ export class LandingComponent implements OnInit, OnDestroy {
         value => {
           console.log('Feedback Success: ', value);
           this.feedbackIsFetching = false;
-          this.openSnackBar(value.message, 'Ok');
+          this.openSnackBar('Спасибо, что связались с нами!', 'Ok');
         },
         error => {
           console.log('Feedback Error: ', error);

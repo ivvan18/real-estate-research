@@ -5,18 +5,18 @@
 <ng-container *ngIf="!screenLoading">
   <div class="background">
     <div class="search-container">
-      <h1 class="search-header">Find out predictable payback period</h1>
+      <h1 class="search-header">Узнайте предполагаемый срок окупаемости</h1>
       <div class="search-section">
         <div class="range-control range upper-range">
-          <div class="range-label">Payback period, years</div>
+          <div class="range-label">Срок окупаемости, годы</div>
           <ng5-slider [(value)]="coeffSelectedMin" [(highValue)]="coeffSelectedMax" [options]="{floor: coeffMin, ceil: coeffMax}"></ng5-slider>
         </div>
         <div class="range-control range">
-          <div class="range-label">Square, м&#178;</div>
+          <div class="range-label">Площадь, м&#178;</div>
           <ng5-slider [(value)]="squareSelectedMin" [(highValue)]="squareSelectedMax" [options]="{floor: squareMin, ceil: squareMax}"></ng5-slider>
         </div>
         <div class="range-control range">
-          <div class="range-label">Price, &#8381;</div>
+          <div class="range-label">Цена, &#8381;</div>
           <ng5-slider [(value)]="priceSelectedMin" [(highValue)]="priceSelectedMax" [options]="{floor: priceMin, ceil: priceMax}"></ng5-slider>
         </div>
       </div>
@@ -26,7 +26,7 @@
                 mat-raised-button
                 [disabled]="estatesLoading"
                 (click)="onSearchEstatesClicked()">
-          {{ estatesLoading ? '' : 'Search'}}
+          {{ estatesLoading ? '' : 'Найти'}}
           <mat-spinner *ngIf="estatesLoading" class="spinner" [diameter]="20"></mat-spinner>
         </button>
       </div>
@@ -35,15 +35,15 @@
   <div class="stats-container">
     <div class="stats-item">
       <div class="stats-number">{{averagePayback}}</div>
-      <div class="stats-sub-header">Average payback period in years</div>
+      <div class="stats-sub-header">Средний срок окупаемости, годы</div>
     </div>
     <div class="stats-item">
       <div class="stats-number">{{recordsCount}}</div>
-      <div class="stats-sub-header">Total number of ads analyzed</div>
+      <div class="stats-sub-header">Всего просмотрено объявлений</div>
     </div>
     <div class="stats-item">
       <div class="stats-number">{{flatsCount}}</div>
-      <div class="stats-sub-header">Real estate objects with payback info found</div>
+      <div class="stats-sub-header">Найдено объектов с окупаемостью</div>
     </div>
   </div>
   <div class="result-container">
@@ -61,19 +61,19 @@
       </angular-yandex-map>
     </div>
     <div *ngIf="selectedEstate" class="results">
-      <div>Sell price: {{selectedEstate.sell_price}} &#8381;</div>
+      <div>Цена продажи: {{selectedEstate.sell_price}} &#8381;</div>
       <button class="background-warning more-button"
               mat-raised-button
               (click)="onEstatePlacemarkClicked(selectedEstate.sell_url)">
-        More info
+        Подробнее
       </button>
-      <div>Rent price: {{selectedEstate.rent_price}} &#8381;/month</div>
+      <div>Цена аренды: {{selectedEstate.rent_price}} &#8381;/month</div>
       <button class="background-warning more-button"
               mat-raised-button
               (click)="onEstatePlacemarkClicked(selectedEstate.rent_url)">
-        More info
+        Подробнее
       </button>
-      <div>Payback period: {{selectedEstate.coeff}} years</div>
+      <div>Срок окупаемости: {{selectedEstate.coeff}} лет</div>
     </div>
   </div>
   <app-footer (contact)="navigate('landing')"></app-footer>

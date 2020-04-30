@@ -4,16 +4,16 @@
       class="nav-item"
       (click)="navigate('landing')">
       <img src="../../../assets/navbar/apartment-icon.png" class="icon">
-      <strong>&nbsp; Restch</strong>
+      <strong>&nbsp; Главная</strong>
     </div>
     <div
       class="nav-item"
       (click)="navigate('search')">
-      <strong>Search</strong>
+      <strong>Поиск</strong>
     </div>
     <div [matMenuTriggerFor]="menu" *ngIf="user" class="nav-item profile">
       <mat-icon>person</mat-icon>
-      <strong class="nav-item">&nbsp; My Account</strong>
+      <strong class="nav-item">&nbsp; Мой аккаунт</strong>
     </div>
   </div>
 </div>
@@ -22,7 +22,7 @@
   <ng-container *ngIf="user">
     <div mat-menu-item class="non-clickable">{{user.username}}</div>
     <mat-divider></mat-divider>
-    <button mat-menu-item (click)="navigate('auth/change-password')">Change password</button>
-    <button mat-menu-item (click)="onLogoutClicked()">Logout</button>
+    <button mat-menu-item (click)="navigate('auth/change-password')">Сменить пароль</button>
+    <button mat-menu-item (click)="onLogoutClicked()">Выйти</button>
   </ng-container>
 </mat-menu>
