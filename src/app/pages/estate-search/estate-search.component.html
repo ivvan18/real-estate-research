@@ -62,18 +62,13 @@
     </div>
     <div *ngIf="selectedEstate" class="results">
       <div>Цена продажи: {{selectedEstate.sell_price}} &#8381;</div>
-      <button class="background-warning more-button"
-              mat-raised-button
-              (click)="onEstatePlacemarkClicked(selectedEstate.sell_url)">
-        Подробнее
-      </button>
       <div>Цена аренды: {{selectedEstate.rent_price}} &#8381;/month</div>
+      <div>Срок окупаемости: {{selectedEstate.coeff}} лет</div>
       <button class="background-warning more-button"
               mat-raised-button
-              (click)="onEstatePlacemarkClicked(selectedEstate.rent_url)">
+              (click)="onEstatePlacemarkClickedNew(selectedEstate.sell_url, selectedEstate.rent_url)">
         Подробнее
       </button>
-      <div>Срок окупаемости: {{selectedEstate.coeff}} лет</div>
     </div>
   </div>
   <app-footer (contact)="navigate('landing')"></app-footer>

@@ -2,48 +2,71 @@
   <mat-spinner [diameter]="200"></mat-spinner>
 </div>
 
-<div *ngIf="!isFetching" class="estate-item-container">
-  <mat-card *ngIf="estate" class="left-card">
-    <mat-card-header>
-      <mat-card-title>{{estate.rooms_count}}-комн. квартира, {{estate.area}} м&#178;</mat-card-title>
-      <mat-card-subtitle>{{estate.address}}</mat-card-subtitle>
-      <mat-card-subtitle>м. {{estate.metro}}</mat-card-subtitle>
-    </mat-card-header>
-    <div class="pictures-container">
-      <ngx-gallery [options]="galleryOptions" [images]="galleryImages" class="ngx-gallery"></ngx-gallery>
-    </div>
-    <mat-card-header>
-      <mat-card-subtitle>{{estate.floor_number}} этаж, {{estate.floors_count}}-этажный дом</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <p>
-        {{estate.description}}
-      </p>
-    </mat-card-content>
-  </mat-card>
+<mat-tab-group class="tab-buttons" *ngIf="doubleState" (selectedTabChange)="onTabChange($event)">
+  <mat-tab label="Продажа">
+    <ng-container *ngIf="!isFetching">
+      <ng-container *ngTemplateOutlet="estateInfo; context: {estate: estate, estateImages: galleryImages, tabIndex: 0}"></ng-container>
+    </ng-container>
+  </mat-tab>
+  <mat-tab label="Аренда">
+    <ng-container *ngIf="!isFetching">
+      <ng-container *ngTemplateOutlet="estateInfo; context: {estate: rentEstate, estateImages: rentGalleryImages, tabIndex: 1}"></ng-container>
+    </ng-container>
+  </mat-tab>
+</mat-tab-group>
 
-  <div class="right-card-section">
-    <mat-card *ngIf="estate" class="price-card">
-      <mat-card-header>
-          <mat-card-title>{{estate.price | currency : '&#8381;'}} {{estate.type === 2 ? ' /мес.' : ''}}</mat-card-title>
-        <mat-card-subtitle>Телефон: {{estate.phone}}</mat-card-subtitle>
-        <mat-card-subtitle>
-          <button mat-raised-button color="primary" (click)="onCianLinkClicked()">Перейти на ЦИАН</button>
-        </mat-card-subtitle>
-      </mat-card-header>
-    </mat-card>
-    <mat-card *ngIf="estate" class="map-card">
-      <mat-card-header>
-        <mat-card-title>Расположение на карте</mat-card-title>
-      </mat-card-header>
-      <div class="map-container">
-        <angular-yandex-map [center]="[estate.latitude, estate.longitude]" [zoom]="9">
-          <angular-yandex-placemark
-            [geometry]="[estate.latitude, estate.longitude]"
-          ></angular-yandex-placemark>
-        </angular-yandex-map>
-      </div>
-    </mat-card>
-  </div>
-</div>
+<ng-container *ngIf="!isFetching && !doubleState">
+  <ng-container *ngTemplateOutlet="estateInfo; context: {estate: estate, estateImages: galleryImages, tabIndex: currentTabIndex}"></ng-container>
+</ng-container>
+
 <app-footer (contact)="navigate('landing')"></app-footer>
+
+<ng-template #estateInfo let-estate="estate" let-estateImages="estateImages" let-tabIndex="tabIndex">
+  <div class="estate-item-container"
+       [style.padding-top]="!doubleState ? '100px' : '20px'"
+       [style.padding-right]="!doubleState ? '50px' : '0px'"
+       [style.padding-left]="!doubleState ? '50px' : '0px'">
+    <mat-card *ngIf="estate" class="left-card">
+      <mat-card-header>
+        <mat-card-title>{{estate.rooms_count}}-комн. квартира, {{estate.area}} м&#178;</mat-card-title>
+        <mat-card-subtitle>{{estate.address}}</mat-card-subtitle>
+        <mat-card-subtitle>м. {{estate.metro}}</mat-card-subtitle>
+      </mat-card-header>
+      <div class="pictures-container">
+        <ngx-gallery [options]="galleryOptions" [images]="estateImages" class="ngx-gallery"></ngx-gallery>
+      </div>
+      <mat-card-header>
+        <mat-card-subtitle>{{estate.floor_number}} этаж, {{estate.floors_count}}-этажный дом</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>
+          {{estate.description}}
+        </p>
+      </mat-card-content>
+    </mat-card>
+
+    <div class="right-card-section">
+      <mat-card *ngIf="estate" class="price-card">
+        <mat-card-header>
+          <mat-card-title>{{estate.price | currency : '&#8381;'}} {{estate.type === 2 ? ' /мес.' : ''}}</mat-card-title>
+          <mat-card-subtitle>Телефон: {{estate.phone}}</mat-card-subtitle>
+          <mat-card-subtitle>
+            <button mat-raised-button color="primary" (click)="onCianLinkClicked(estate)">Перейти на ЦИАН</button>
+          </mat-card-subtitle>
+        </mat-card-header>
+      </mat-card>
+      <mat-card *ngIf="estate" class="map-card">
+        <mat-card-header>
+          <mat-card-title>Расположение на карте</mat-card-title>
+        </mat-card-header>
+        <div *ngIf="currentTabIndex === tabIndex" class="map-container">
+          <angular-yandex-map [center]="[estate.latitude, estate.longitude]" [zoom]="9">
+            <angular-yandex-placemark
+              [geometry]="[estate.latitude, estate.longitude]"
+            ></angular-yandex-placemark>
+          </angular-yandex-map>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</ng-template>

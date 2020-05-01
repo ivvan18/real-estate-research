@@ -108,6 +108,15 @@ export class EstateSearchComponent implements OnInit, OnDestroy {
     this.router.navigate([]).then(() => { window.open('/estate/' + strings[strings.length - 1], '_blank'); });
   }
 
+  onEstatePlacemarkClickedNew(sellUrl: string, rentUrl: string) {
+    const sellUrlAarray = sellUrl.split('/');
+    const rentUrlArray = rentUrl.split('/');
+
+
+    this.router.navigate([]).then(() => { window.open('/estate?sell=' + sellUrlAarray[sellUrlAarray.length - 1] + '&rent=' +
+      rentUrlArray[rentUrlArray.length - 1], '_blank'); });
+  }
+
   navigate(url: string) {
     this.router.navigate([url]);
   }

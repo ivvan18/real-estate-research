@@ -8,8 +8,9 @@ import {MatButtonModule} from '@angular/material/button';
 import {AngularYandexMapsModule} from 'angular8-yandex-maps';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {UtilModule} from '../../util/util.module';
+import {MatTabsModule} from '@angular/material/tabs';
 
-const MatModules = [MatCardModule, MatButtonModule, MatProgressSpinnerModule];
+const MatModules = [MatCardModule, MatButtonModule, MatProgressSpinnerModule, MatTabsModule];
 
 @NgModule({
   declarations: [EstateItemComponent],

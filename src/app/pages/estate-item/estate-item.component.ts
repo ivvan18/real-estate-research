@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subject} from 'rxjs';
+import {forkJoin, Subject} from 'rxjs';
 import {RestService} from '../../services/rest.service';
 import {NgxGalleryAnimation, NgxGalleryImage, NgxGalleryOptions } from '@kolkov/ngx-gallery';
 import {IEstate} from '../../models/IEstate';
-import {finalize, takeUntil} from 'rxjs/operators';
+import {finalize, map, switchMap, takeUntil} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
@@ -12,12 +12,17 @@ import {ActivatedRoute, Router} from '@angular/router';
   styleUrls: ['./estate-item.component.scss']
 })
 export class EstateItemComponent implements OnInit, OnDestroy {
+  doubleState = false;
   isFetching = true;
   estate: IEstate;
   estateId: number;
 
+  currentTabIndex = 0;
+  rentEstate: IEstate;
+
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
+  rentGalleryImages: NgxGalleryImage[];
 
   private readonly destroy$ = new Subject();
 
@@ -26,53 +31,69 @@ export class EstateItemComponent implements OnInit, OnDestroy {
               private router: Router) { }
 
   ngOnInit(): void {
-    this.route.params
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(params => {
-        this.estateId = params.id;
-        console.log('EstateId: ', this.estateId);
+    this.galleryOptions = [
+      {
+        width: '600px',
+        height: '400px',
+        thumbnailsColumns: 4,
+        imageAnimation: NgxGalleryAnimation.Slide
+      },
+      // max-width 800
+      {
+        breakpoint: 800,
+        width: '100%',
+        height: '600px',
+        imagePercent: 80,
+        thumbnailsPercent: 20,
+        thumbnailsMargin: 20,
+        thumbnailMargin: 20
+      },
+      // max-width 400
+      {
+        breakpoint: 400,
+        preview: false
+      }
+    ];
 
-        this.rest.getEntityById('realty', this.estateId)
-          .pipe(
-            takeUntil(this.destroy$),
-            finalize(() => this.isFetching = false)
-          )
-          .subscribe(result => {
-            console.log('Result: ', result);
-            const images = result.realty.images.split(',');
-            this.estate = result.realty;
+    this.route.queryParams
+      .pipe(
+        takeUntil(this.destroy$),
+        switchMap(params => {
+          if (params.sell && params.rent) {
+            this.doubleState = true;
+            return forkJoin(this.rest.getEntityById('realty', params.sell), this.rest.getEntityById('realty', params.rent))
+              .pipe(
+                map(result => ({sell: result[0].realty, rent: result[1].realty})),
+                finalize(() => this.isFetching = false));
+          } else {
+            return this.route.params.pipe(
+              switchMap(
+                parameters => {
+                  this.estateId = parameters.id;
+                  console.log('EstateId: ', this.estateId);
 
-            console.log('images: ', images);
-            this.galleryOptions = [
-              {
-                width: '600px',
-                height: '400px',
-                thumbnailsColumns: 4,
-                imageAnimation: NgxGalleryAnimation.Slide
-              },
-              // max-width 800
-              {
-                breakpoint: 800,
-                width: '100%',
-                height: '600px',
-                imagePercent: 80,
-                thumbnailsPercent: 20,
-                thumbnailsMargin: 20,
-                thumbnailMargin: 20
-              },
-              // max-width 400
-              {
-                breakpoint: 400,
-                preview: false
-              }
-            ];
+                  return this.rest.getEntityById('realty', this.estateId)
+                    .pipe(
+                      takeUntil(this.destroy$),
+                      finalize(() => this.isFetching = false)
+                    );
+                }
+              )
+            );
+          }
+        })
+      )
+      .subscribe((result: any) => {
+        console.log('Result: ', result);
+        if (this.doubleState) {
+          this.estate = result.sell;
+          this.rentEstate = result.rent;
+          this.setRentGalleryImages(result.rent.images.split(','));
+        } else {
+          this.estate = result.realty;
+        }
 
-            this.galleryImages = images.map(img => ({
-              small: img,
-              medium: img,
-              big: img
-            }));
-          });
+        this.setGalleryImages(this.estate.images.split(','));
       });
   }
 
@@ -81,11 +102,32 @@ export class EstateItemComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  onCianLinkClicked() {
-    window.open(this.estate.url, '_blank');
+  setGalleryImages(images: string[]) {
+    this.galleryImages = images.map(img => ({
+      small: img,
+      medium: img,
+      big: img
+    }));
+  }
+
+  setRentGalleryImages(images: string[]) {
+    this.rentGalleryImages = images.map(img => ({
+      small: img,
+      medium: img,
+      big: img
+    }));
+  }
+
+  onCianLinkClicked(estate: IEstate) {
+    window.open(estate.url, '_blank');
   }
 
   navigate(url: string) {
     this.router.navigate([url]);
+  }
+
+  onTabChange(event: any) {
+    console.log('onTabChange: ', event);
+    this.currentTabIndex = event.index;
   }
 }

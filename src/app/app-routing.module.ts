@@ -21,6 +21,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/estate-item/estate-item.module').then(estate => estate.EstateItemModule)
   },
   {
+    path: 'estate',
+    loadChildren: () => import('./pages/estate-item/estate-item.module').then(estate => estate.EstateItemModule)
+  },
+  {
     path: '**',
     redirectTo: 'landing'
   }
