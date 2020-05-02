@@ -11,6 +11,11 @@
       (click)="navigate('search')">
       <strong>Поиск</strong>
     </div>
+    <div
+      class="nav-item"
+      (click)="navigate('stats')">
+      <strong>Статистика</strong>
+    </div>
     <div [matMenuTriggerFor]="menu" *ngIf="user" class="nav-item profile">
       <mat-icon>person</mat-icon>
       <strong class="nav-item">&nbsp; Мой аккаунт</strong>

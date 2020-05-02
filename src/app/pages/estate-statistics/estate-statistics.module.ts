@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-
+import { EstateStatisticsComponent } from './estate-statistics.component';
+import {EstateStatisticsRoutingModule} from './estate-statistics-routing.module';
 
 @NgModule({
-  declarations: [],
+  declarations: [EstateStatisticsComponent],
   imports: [
-    CommonModule
+    CommonModule,
+    EstateStatisticsRoutingModule
   ]
 })
 export class EstateStatisticsModule { }

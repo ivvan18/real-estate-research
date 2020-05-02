@@ -17,6 +17,11 @@ const routes: Routes = [
     canActivate: [AuthGuardService]
   },
   {
+    path: 'stats',
+    loadChildren: () => import('./pages/estate-statistics/estate-statistics.module').then(estate => estate.EstateStatisticsModule),
+    canActivate: [AuthGuardService]
+  },
+  {
     path: 'estate/:id',
     loadChildren: () => import('./pages/estate-item/estate-item.module').then(estate => estate.EstateItemModule)
   },
