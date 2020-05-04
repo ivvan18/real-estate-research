@@ -5,6 +5,7 @@ import {NgxGalleryAnimation, NgxGalleryImage, NgxGalleryOptions } from '@kolkov/
 import {IEstate} from '../../models/IEstate';
 import {finalize, map, switchMap, takeUntil} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-estate-item',
@@ -16,6 +17,7 @@ export class EstateItemComponent implements OnInit, OnDestroy {
   isFetching = true;
   estate: IEstate;
   estateId: number;
+  addFavFetching = false;
 
   currentTabIndex = 0;
   rentEstate: IEstate;
@@ -28,7 +30,8 @@ export class EstateItemComponent implements OnInit, OnDestroy {
 
   constructor(private rest: RestService,
               private route: ActivatedRoute,
-              private router: Router) { }
+              private router: Router,
+              private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.galleryOptions = [
@@ -126,8 +129,31 @@ export class EstateItemComponent implements OnInit, OnDestroy {
     this.router.navigate([url]);
   }
 
+  addToFavorite() {
+    this.addFavFetching = true;
+
+    this.rest.postEntity('add_favourite', {sell: this.estate.id, rent: this.rentEstate.id})
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => this.addFavFetching = false)
+      )
+      .subscribe(result => {
+        console.log('Added to favourites: ', result);
+        this.openSnackBar(result.message, 'Ok');
+      }, error => {
+        console.log('Error Adding to favourites: ', error);
+        this.openSnackBar(error.error.message, 'Ok');
+      });
+  }
+
   onTabChange(event: any) {
     console.log('onTabChange: ', event);
     this.currentTabIndex = event.index;
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
   }
 }

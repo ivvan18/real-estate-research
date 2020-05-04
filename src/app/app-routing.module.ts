@@ -30,6 +30,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/estate-item/estate-item.module').then(estate => estate.EstateItemModule)
   },
   {
+    path: 'profile',
+    loadChildren: () => import('./pages/user-profile/user-profile.module').then(user => user.UserProfileModule)
+  },
+  {
     path: '**',
     redirectTo: 'landing'
   }

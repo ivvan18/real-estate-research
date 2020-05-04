@@ -13,6 +13,18 @@
       <ng-container *ngTemplateOutlet="estateInfo; context: {estate: rentEstate, estateImages: rentGalleryImages, tabIndex: 1}"></ng-container>
     </ng-container>
   </mat-tab>
+  <mat-tab disabled>
+    <ng-template mat-tab-label>
+      <button mat-flat-button
+              color="primary"
+              class="add-fav-button"
+              (click)="addToFavorite()">
+        <mat-icon *ngIf="!addFavFetching">favorite_border</mat-icon>&nbsp;
+        {{ addFavFetching ? '' : 'Добавить в избранное'}}
+        <mat-spinner *ngIf="addFavFetching" class="spinner" [diameter]="20"></mat-spinner>
+      </button>
+    </ng-template>
+  </mat-tab>
 </mat-tab-group>
 
 <ng-container *ngIf="!isFetching && !doubleState">

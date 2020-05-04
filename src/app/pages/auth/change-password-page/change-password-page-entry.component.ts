@@ -21,7 +21,7 @@ export class ChangePasswordPageEntryComponent {
 
     dialogRef.afterClosed().subscribe( result => {
       if (!result || !result.blockNavBack) {
-        this.router.navigate(['landing']);
+        this.router.navigate(['profile']);
       }
     });
   }

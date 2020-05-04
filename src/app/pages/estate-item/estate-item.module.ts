@@ -9,8 +9,10 @@ import {AngularYandexMapsModule} from 'angular8-yandex-maps';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {UtilModule} from '../../util/util.module';
 import {MatTabsModule} from '@angular/material/tabs';
+import {MatIconModule} from '@angular/material/icon';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
-const MatModules = [MatCardModule, MatButtonModule, MatProgressSpinnerModule, MatTabsModule];
+const MatModules = [MatCardModule, MatButtonModule, MatProgressSpinnerModule, MatTabsModule, MatIconModule, MatSnackBarModule];
 
 @NgModule({
   declarations: [EstateItemComponent],

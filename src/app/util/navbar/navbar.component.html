@@ -25,9 +25,8 @@
 
 <mat-menu #menu="matMenu">
   <ng-container *ngIf="user">
-    <div mat-menu-item class="non-clickable">{{user.username}}</div>
+    <div mat-menu-item (click)="navigate('profile')">{{user.username}}</div>
     <mat-divider></mat-divider>
-    <button mat-menu-item (click)="navigate('auth/change-password')">Сменить пароль</button>
     <button mat-menu-item (click)="onLogoutClicked()">Выйти</button>
   </ng-container>
 </mat-menu>

@@ -2,6 +2,22 @@
   background-color: #f5f5f5;
 }
 
+.add-fav-button {
+  background-color: #ffc107;
+  color: black;
+  width: 213px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .spinner {
+    display: inline-block;
+    opacity: 1;
+    transition: opacity .3s ease-in-out;
+  }
+}
+
 .estate-item-container {
   width: 100%;
   min-height: 100%;
@@ -51,4 +67,8 @@
   padding-right: 50px;
   padding-left: 50px;
   background-color: #f5f5f5;
+}
+
+.tabs-width {
+  width: 40%;
 }
