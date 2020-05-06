@@ -5,6 +5,7 @@ import {EstateStatisticsRoutingModule} from './estate-statistics-routing.module'
 import {UtilModule} from '../../util/util.module';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatTableModule} from '@angular/material/table';
+import {AngularYandexMapsModule} from 'angular8-yandex-maps';
 
 const MatModules = [MatProgressSpinnerModule, MatTableModule];
 
@@ -14,7 +15,8 @@ const MatModules = [MatProgressSpinnerModule, MatTableModule];
     CommonModule,
     EstateStatisticsRoutingModule,
     UtilModule,
-    MatModules
+    MatModules,
+    AngularYandexMapsModule
   ]
 })
 export class EstateStatisticsModule { }
