@@ -28,15 +28,28 @@
     <tr (click)="onTopEstateClicked(row)" class="top-table-line" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
   <h2 class="top-header">Карта районов Москвы</h2>
-  <div class="districts-container">
-    <angular-yandex-map [center]="[55.75, 37.61]" [options]="{searchControlProvider: 'yandex#search'}" [zoom]="9">
-      <ng-container *ngFor="let municipality of municipalities">
-        <angular-yandex-geoobject
-          [feature]="municipality.feature"
-          [options]="municipality.options"
-        ></angular-yandex-geoobject>
-      </ng-container>
-    </angular-yandex-map>
+  <div class="maps-container">
+    <div class="municipalities">
+      <angular-yandex-map [center]="[55.75, 37.61]" [options]="{searchControlProvider: 'yandex#search'}" [zoom]="9">
+        <ng-container *ngFor="let municipality of municipalities">
+          <angular-yandex-geoobject
+            [feature]="municipality.feature"
+            [options]="municipality.options"
+          ></angular-yandex-geoobject>
+        </ng-container>
+      </angular-yandex-map>
+    </div>
+
+    <div class="administries">
+      <angular-yandex-map [center]="[55.75, 37.61]" [options]="{searchControlProvider: 'yandex#search'}" [zoom]="9">
+        <ng-container *ngFor="let administry of administries">
+          <angular-yandex-geoobject
+            [feature]="administry.feature"
+            [options]="administry.options"
+          ></angular-yandex-geoobject>
+        </ng-container>
+      </angular-yandex-map>
+    </div>
   </div>
 </div>
 <app-footer (contact)="navigate('landing')"></app-footer>

@@ -16,22 +16,30 @@ export class EstateStatisticsComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<any>;
   colorPalette = ['#3F51B5', '#006CC6', '#0080C5', '#0091B5', '#009E9D', '#05A985'];
   municipalities = [];
+  administries = [];
 
   private readonly destroy$ = new Subject();
 
   constructor(private rest: RestService, private router: Router) { }
 
   ngOnInit(): void {
-    forkJoin(this.rest.getEntities('top'), this.rest.getEntities('districts'))
-      .pipe(
+    forkJoin(
+      this.rest.getEntities('top'),
+      this.rest.getEntities('districts'),
+      this.rest.getEntities('ao'),
+      this.rest.getEntities('ao_coords')
+    ).pipe(
         takeUntil(this.destroy$),
         finalize(() => this.isFetching = false)
       )
-      .subscribe(([top, districts]) => {
+      .subscribe(([top, districts, aos, aoCoords]) => {
         console.log('Top: ', top);
         this.dataSource = new MatTableDataSource(top);
 
         console.log('Districts: ', districts);
+
+        console.log('Aos: ', aos);
+        console.log('Ao_coords: ', aoCoords);
 
         districts.districts.forEach(district => {
           const options = {
@@ -69,6 +77,74 @@ export class EstateStatisticsComponent implements OnInit, OnDestroy {
             feature
           });
         });
+
+        aos.ao.forEach(ao => {
+          const options = {
+            fillColor: '#DC143C',
+            strokeColor: '#FF0000',
+            opacity: 0.5,
+            strokeWidth: 4,
+            strokeStyle: 'solid'
+          };
+
+          const additionalCoords = aoCoords.features.find(feat => feat.properties.NAME === ao.name).geometry.coordinates;
+
+          let coords = [];
+
+          if (ao.type === 'Polygon') {
+            additionalCoords.forEach(addCoords => {
+              const revertedCoords = addCoords.map(pair => {
+                const temp = pair[0];
+                pair[0] = pair[1];
+                pair[1] = temp;
+
+                return pair;
+              });
+
+              console.log('addCoords: ', addCoords[0]);
+
+              coords.push(revertedCoords);
+            });
+          } else {
+            additionalCoords.forEach((addCoords, index) => {
+              coords.push([]);
+              addCoords.forEach((addInnerCoords, innerIndex) => {
+                coords[index].push([]);
+                const revertedCoords = addInnerCoords.map(pair => {
+                  const temp = pair[0];
+                  pair[0] = pair[1];
+                  pair[1] = temp;
+
+                  return pair;
+                });
+
+                coords[index][innerIndex] = revertedCoords;
+              });
+            });
+          }
+
+          if (ao.type !== 'Polygon') {
+            coords = coords.map(coord => coord[0]);
+          }
+
+          const feature = {
+            geometry: {
+              type: 'Polygon',
+              coordinates: coords,
+              fillRule: 'nonZero',
+            },
+            properties: {
+              balloonContentHeader: ao.name,
+            }
+          };
+
+          this.administries.push({
+            options,
+            feature
+          });
+        });
+        console.log('municipalities: ', this.municipalities);
+        console.log('administries: ', this.administries);
       });
   }
 
