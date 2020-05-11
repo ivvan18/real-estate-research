@@ -11,8 +11,12 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {UtilModule} from '../../util/util.module';
 import {Ng5SliderModule} from 'ng5-slider';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatDialogModule} from '@angular/material/dialog';
 
-const MatModules = [MatButtonModule, MatInputModule, MatFormFieldModule, MatSelectModule, MatProgressSpinnerModule];
+const MatModules = [MatButtonModule, MatInputModule, MatFormFieldModule, MatSelectModule,
+  MatProgressSpinnerModule, MatAutocompleteModule, MatProgressBarModule, MatDialogModule];
 
 @NgModule({
   declarations: [EstateSearchComponent],

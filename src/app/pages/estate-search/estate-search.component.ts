@@ -1,11 +1,14 @@
-import {ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {RestService} from '../../services/rest.service';
-import {finalize, takeUntil} from 'rxjs/operators';
+import {debounceTime, filter, finalize, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {forkJoin, Subject} from 'rxjs';
-import {FormBuilder} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {IEvent} from 'angular8-yandex-maps';
 import {IMapEstate} from '../../models/IMapEstate';
+import {DaDataService} from '../../services/da-data.service';
+import {AreasMatcher, checkAreas, checkFloors, FloorsMatcher} from '../auth/util/util';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-estate-search',
@@ -13,6 +16,22 @@ import {IMapEstate} from '../../models/IMapEstate';
   styleUrls: ['./estate-search.component.scss']
 })
 export class EstateSearchComponent implements OnInit, OnDestroy {
+  @ViewChild('rules') rules: TemplateRef<any>;
+
+  estimateFormGroup: FormGroup;
+  areasMatcher = new AreasMatcher();
+  floorsMatcher = new FloorsMatcher();
+  hasEstimateFormErrors = false;
+  estimateEstateLoading = false;
+  estimatedPrice: number;
+
+  addressSearchString = new FormControl('');
+  areAddressesLoading: boolean;
+  addressedNotFound = false;
+  addressLat: number;
+  addressLon: number;
+  addressOptions = [];
+  isEstateEstimate = true;
   estates: IMapEstate[];
   selectedEstate: IMapEstate;
   previousClickedEstate: any;
@@ -37,15 +56,46 @@ export class EstateSearchComponent implements OnInit, OnDestroy {
   flatsCount: number;
   MyBalloonContentLayoutClass: any;
 
+  wallMaterials = [
+    {value: 0, viewValue: 'Неизвестно'},
+    {value: 1, viewValue: 'Блок'},
+    {value: 2, viewValue: 'Кирпич'},
+    {value: 3, viewValue: 'Монолит'},
+    {value: 4, viewValue: 'Монолитный блок'},
+    {value: 5, viewValue: 'Старое'},
+    {value: 6, viewValue: 'Панелька'},
+    {value: 7, viewValue: 'Сталинка'},
+    {value: 8, viewValue: 'Дерево'},
+  ];
+
   private readonly destroy$ = new Subject();
 
   constructor(private rest: RestService,
               private ngZone: NgZone,
               private router: Router,
+              private daData: DaDataService,
+              private dialog: MatDialog,
               private cd: ChangeDetectorRef,
               private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
+    this.estimateFormGroup = this.formBuilder.group(
+      {
+        address: ['', Validators.required],
+        totalArea: ['', [Validators.required, Validators.min(0), Validators.max(10000)]],
+        kitchenArea: ['', [Validators.required, Validators.min(0)]],
+        wallsMaterial: ['', Validators.required],
+        floorsTotal: ['', [Validators.required, Validators.pattern(/^[0-9]*[1-9][0-9]*$/), Validators.max(100)]],
+        floorNumber: ['', [Validators.required, Validators.pattern(/^[0-9]*[1-9][0-9]*$/)]],
+      },
+      {validators: [checkFloors, checkAreas]}
+    );
+
+    this.estimateFormGroup.valueChanges
+      .subscribe(() => this.getFormValidationErrors());
+
+    this.subscribeAddressChanges();
+
     forkJoin(
       {
         averagePayback: this.rest.getEntities('payback'),
@@ -136,5 +186,87 @@ export class EstateSearchComponent implements OnInit, OnDestroy {
 
       this.cd.markForCheck();
     });
+  }
+
+  handleAddressInputEvent(event: any) {
+    event.stopPropagation();
+  }
+
+  onAddressClicked(address: any) {
+    this.daData.getAddress(address.value, 1).subscribe(data => {
+      console.log('Address clicked: ', data);
+      this.addressLat = data.suggestions[0].data.geo_lat;
+      this.addressLon = data.suggestions[0].data.geo_lon;
+      console.log('Coordinates: ', this.addressLat, this.addressLon);
+    });
+  }
+
+  onEstimateEstateClicked() {
+    this.estimateEstateLoading = true;
+
+    const filters = this.estimateFormGroup.getRawValue();
+    delete filters.address;
+    filters.latitude = this.addressLat;
+    filters.longitude = this.addressLon;
+
+    console.log('onEstimateEstateClicked: ', filters);
+
+    this.rest.getEntities('estimate', filters)
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => this.estimateEstateLoading = false)
+      )
+      .subscribe(data => {
+        console.log('Getting prediction data: ', data);
+        this.estimatedPrice = data['Predicted price'];
+      });
+  }
+
+  getFormValidationErrors() {
+    let hasErrors = false;
+    Object.keys(this.estimateFormGroup.controls).forEach(key => {
+
+      const controlErrors: ValidationErrors = this.estimateFormGroup.get(key).errors;
+      if (controlErrors != null) {
+        hasErrors = true;
+        Object.keys(controlErrors).forEach(keyError => {
+          console.log('Key control: ' + key + ', keyError: ' + keyError + ', err value: ', controlErrors[keyError]);
+        });
+      } else {
+        console.log('Key control: ' + key + ' has no errors');
+      }
+    });
+
+    this.hasEstimateFormErrors = hasErrors;
+  }
+
+  onRulesClicked() {
+    console.log('onRulesClicked');
+    this.dialog.open(this.rules, {width: '600px'});
+  }
+
+  private subscribeAddressChanges() {
+    this.addressSearchString.valueChanges
+      .pipe(
+        tap(() => {
+          console.log('Change!!');
+          this.areAddressesLoading = true;
+        }),
+        debounceTime(500),
+        tap(request => {
+          if (!request) {
+            this.areAddressesLoading = false;
+            this.addressOptions = [];
+          }
+        }),
+        filter(request => !!request),
+        switchMap(data => this.daData.getAddress('Москва ' + data, 5)),
+        tap(() => (this.areAddressesLoading = false))
+      )
+      .subscribe((data: any) => {
+        console.log('Addresses loaded: ', data);
+        this.addressedNotFound = data.suggestions.length === 0;
+        this.addressOptions = data.suggestions;
+      });
   }
 }

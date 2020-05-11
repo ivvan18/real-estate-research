@@ -9,6 +9,19 @@
   font-weight: 700;
 }
 
+.headers {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.sub-header {
+  font-size: 20px;
+  font-weight: 300;
+  margin-bottom: 20px;
+  width: 45%;
+}
+
 .top-table {
   width: 65%;
   margin-bottom: 40px;

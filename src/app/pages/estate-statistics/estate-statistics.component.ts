@@ -135,6 +135,9 @@ export class EstateStatisticsComponent implements OnInit, OnDestroy {
             },
             properties: {
               balloonContentHeader: ao.name,
+              balloonContentBody:
+                '<p>Средняя стоимость за м&#178;: ' + ao.avg_sq + ' &#8381;</p>' +
+                '<p>Средний срок окупаемости, годы: ' + ao.avg_coeff + '</p>',
             }
           };
 

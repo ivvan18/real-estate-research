@@ -27,7 +27,11 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr (click)="onTopEstateClicked(row)" class="top-table-line" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
-  <h2 class="top-header">Карта районов Москвы</h2>
+  <h2 class="top-header">Статистика по округам Москвы</h2>
+  <div class="headers">
+    <div class="sub-header">Муниципальные округи</div>
+    <div class="sub-header">Административные округи</div>
+  </div>
   <div class="maps-container">
     <div class="municipalities">
       <angular-yandex-map [center]="[55.75, 37.61]" [options]="{searchControlProvider: 'yandex#search'}" [zoom]="9">

@@ -74,6 +74,7 @@ export class JwtInterceptor implements HttpInterceptor {
   private isHeaderRequired(request: HttpRequest<any>): boolean {
     return (
       request.url.includes(environment.restUrl) &&
+      !request.url.includes('https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address') &&
       authPaths.every(path => !request.url.includes(path))
     );
   }
