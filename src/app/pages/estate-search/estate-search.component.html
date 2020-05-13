@@ -154,8 +154,8 @@
       </angular-yandex-map>
     </div>
     <div *ngIf="selectedEstate" class="results">
-      <div>Цена продажи: {{selectedEstate.sell_price}} &#8381;</div>
-      <div>Цена аренды: {{selectedEstate.rent_price}} &#8381;/month</div>
+      <div>Цена продажи: {{selectedEstate.sell_price | currency : '&#8381;'}}</div>
+      <div>Цена аренды: {{selectedEstate.rent_price | currency : '&#8381;'}} / месяц</div>
       <div>Срок окупаемости: {{selectedEstate.coeff}} лет</div>
       <button class="background-warning more-button"
               mat-raised-button

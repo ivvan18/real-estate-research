@@ -4,6 +4,7 @@ import {forkJoin, Subject} from 'rxjs';
 import {finalize, takeUntil} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {MatTableDataSource} from '@angular/material/table';
+import {CurrencyPipe} from '@angular/common';
 
 @Component({
   selector: 'app-estate-statistics',
@@ -15,12 +16,19 @@ export class EstateStatisticsComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['area', 'sell_price', 'rent_price', 'coeff'];
   dataSource: MatTableDataSource<any>;
   colorPalette = ['#3F51B5', '#006CC6', '#0080C5', '#0091B5', '#009E9D', '#05A985'];
+  greenRedPalette = ['#508104', '#9e8e01', '#f3b800', '#db8200', '#b64201'];
   municipalities = [];
+  municipalitiesSqMeterPrices = [];
+  municipalitiesCoeffs = [];
+  municipalitiesFetching = false;
   administries = [];
+  administriesSqMeterPrices = [];
+  administriesCoeffs = [];
+  administriesFetching = false;
 
   private readonly destroy$ = new Subject();
 
-  constructor(private rest: RestService, private router: Router) { }
+  constructor(private rest: RestService, private router: Router, private currencyPipe: CurrencyPipe) { }
 
   ngOnInit(): void {
     forkJoin(
@@ -41,11 +49,17 @@ export class EstateStatisticsComponent implements OnInit, OnDestroy {
         console.log('Aos: ', aos);
         console.log('Ao_coords: ', aoCoords);
 
+        this.municipalitiesSqMeterPrices = districts.districts.map(district => district.avg_sq).sort((a, b) => a - b);
+        this.municipalitiesCoeffs = districts.districts.map(district => district.avg_coeff).sort((a, b) => a - b);
+
+        console.log('municipalitiesSqMeterPrices: ', this.municipalitiesSqMeterPrices);
+        console.log('municipalitiesCoeffs: ', this.municipalitiesCoeffs);
+
         districts.districts.forEach(district => {
           const options = {
-              fillColor: this.chooseRandomColor(),
+              fillColor: this.chooseClusterColor(this.municipalitiesSqMeterPrices, district.avg_sq),
               strokeColor: '#0000FF',
-              opacity: 0.5,
+              opacity: 0.7,
               strokeWidth: 1,
               strokeStyle: 'solid'
             };
@@ -67,8 +81,10 @@ export class EstateStatisticsComponent implements OnInit, OnDestroy {
             properties: {
               balloonContentHeader: district.name,
               balloonContentBody:
-                '<p>Средняя стоимость за м&#178;: ' + district.avg_sq + ' &#8381;</p>' +
-                '<p>Средний срок окупаемости, годы: ' + district.avg_coeff + '</p>',
+                '<p>Средняя стоимость за м&#178;: ' + (this.currencyPipe.transform(district.avg_sq, '&#8381;') || 'Нет данных') + ' </p>' +
+                '<p>Средний срок окупаемости, годы: ' + (district.avg_coeff || 'Нет данных') + '</p>',
+              avg_sq: district.avg_sq,
+              avg_coeff: district.avg_coeff
             }
           };
 
@@ -78,12 +94,17 @@ export class EstateStatisticsComponent implements OnInit, OnDestroy {
           });
         });
 
+        this.administriesSqMeterPrices = aos.ao.map(ao => ao.avg_sq).sort((a, b) => a - b);
+        this.administriesCoeffs = aos.ao.map(ao => ao.avg_coeff).sort((a, b) => a - b);
+        console.log('administriesSqMeterPrices: ', this.administriesSqMeterPrices);
+        console.log('administriesCoeffs: ', this.administriesCoeffs);
+
         aos.ao.forEach(ao => {
           const options = {
-            fillColor: '#DC143C',
-            strokeColor: '#FF0000',
-            opacity: 0.5,
-            strokeWidth: 4,
+            fillColor: this.chooseClusterColor(this.administriesSqMeterPrices, ao.avg_sq),
+            strokeColor: '#0000FF',
+            opacity: 0.7,
+            strokeWidth: 2,
             strokeStyle: 'solid'
           };
 
@@ -136,8 +157,10 @@ export class EstateStatisticsComponent implements OnInit, OnDestroy {
             properties: {
               balloonContentHeader: ao.name,
               balloonContentBody:
-                '<p>Средняя стоимость за м&#178;: ' + ao.avg_sq + ' &#8381;</p>' +
-                '<p>Средний срок окупаемости, годы: ' + ao.avg_coeff + '</p>',
+                '<p>Средняя стоимость за м&#178;: ' + (this.currencyPipe.transform( ao.avg_sq, ' &#8381;') || 'Нет данных') + ' </p>' +
+                '<p>Средний срок окупаемости, годы: ' + (ao.avg_coeff || 'Нет данных') + '</p>',
+              avg_sq: ao.avg_sq,
+              avg_coeff: ao.avg_coeff
             }
           };
 
@@ -153,6 +176,59 @@ export class EstateStatisticsComponent implements OnInit, OnDestroy {
 
   chooseRandomColor(): string {
     return this.colorPalette[this.getRandomInt(0, this.colorPalette.length - 1)];
+  }
+
+  chooseClusterColor(entities: number[], entity: number) {
+    if (!entity) {
+      return '#757575';
+    }
+
+    entities = entities.filter(ent => !!ent);
+
+    const clustersNumber = this.greenRedPalette.length;
+    const clusterLength = entities.length / clustersNumber;
+
+    const entityIndex = entities.findIndex(ent => ent === entity);
+
+    const clusterIndexes = [...Array(clustersNumber).keys()];
+
+    for (const clusterIndex of clusterIndexes) {
+      if (entityIndex < (clusterIndex + 1) * clusterLength) {
+        return this.greenRedPalette[clusterIndex];
+      }
+    }
+
+    return this.greenRedPalette[clustersNumber - 1];
+  }
+
+  onMunicipalitiesMapTypeChanged(value: any) {
+    console.log(this.municipalities);
+    this.municipalitiesFetching = true;
+
+    this.municipalities.forEach(municipality => {
+      municipality.options.fillColor = this.chooseClusterColor(value.value === 'coeff' ?
+        this.municipalitiesCoeffs : this.municipalitiesSqMeterPrices, value.value === 'coeff' ?
+        municipality.feature.properties.avg_coeff : municipality.feature.properties.avg_sq);
+    });
+
+    setTimeout(() => {
+      this.municipalitiesFetching = false;
+    }, 100);
+  }
+
+  onAdministriesMapTypeChanged(value: any) {
+    console.log(this.administries);
+    this.administriesFetching = true;
+
+    this.administries.forEach(administry => {
+      administry.options.fillColor = this.chooseClusterColor(value.value === 'coeff' ?
+        this.administriesCoeffs : this.administriesSqMeterPrices, value.value === 'coeff' ?
+        administry.feature.properties.avg_coeff : administry.feature.properties.avg_sq);
+    });
+
+    setTimeout(() => {
+      this.administriesFetching = false;
+    }, 100);
   }
 
   getRandomInt(min: number, max: number) {

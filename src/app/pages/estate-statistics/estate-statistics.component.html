@@ -32,9 +32,31 @@
     <div class="sub-header">Муниципальные округи</div>
     <div class="sub-header">Административные округи</div>
   </div>
+  <div class="headers">
+    <div class="sub-header">
+      <mat-button-toggle-group #group="matButtonToggleGroup" (change)="onMunicipalitiesMapTypeChanged($event)">
+        <mat-button-toggle value="meter" [checked]="true">
+          Квадратный метр
+        </mat-button-toggle>
+        <mat-button-toggle value="coeff">
+          Окупаемость
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    <div class="sub-header">
+      <mat-button-toggle-group #group="matButtonToggleGroup" (change)="onAdministriesMapTypeChanged($event)">
+        <mat-button-toggle value="left" aria-label="Text align left" [checked]="true">
+          Квадратный метр
+        </mat-button-toggle>
+        <mat-button-toggle value="center" aria-label="Text align center">
+          Окупаемость
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+  </div>
   <div class="maps-container">
     <div class="municipalities">
-      <angular-yandex-map [center]="[55.75, 37.61]" [options]="{searchControlProvider: 'yandex#search'}" [zoom]="9">
+      <angular-yandex-map *ngIf="!municipalitiesFetching" [center]="[55.75, 37.61]" [options]="{searchControlProvider: 'yandex#search'}" [zoom]="9">
         <ng-container *ngFor="let municipality of municipalities">
           <angular-yandex-geoobject
             [feature]="municipality.feature"
@@ -45,7 +67,7 @@
     </div>
 
     <div class="administries">
-      <angular-yandex-map [center]="[55.75, 37.61]" [options]="{searchControlProvider: 'yandex#search'}" [zoom]="9">
+      <angular-yandex-map *ngIf="!administriesFetching" [center]="[55.75, 37.61]" [options]="{searchControlProvider: 'yandex#search'}" [zoom]="9">
         <ng-container *ngFor="let administry of administries">
           <angular-yandex-geoobject
             [feature]="administry.feature"

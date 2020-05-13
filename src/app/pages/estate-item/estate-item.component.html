@@ -2,7 +2,7 @@
   <mat-spinner [diameter]="200"></mat-spinner>
 </div>
 
-<mat-tab-group class="tab-buttons" *ngIf="doubleState" (selectedTabChange)="onTabChange($event)">
+<mat-tab-group class="tab-buttons" *ngIf="!isFetching && doubleState" (selectedTabChange)="onTabChange($event)">
   <mat-tab label="Продажа">
     <ng-container *ngIf="!isFetching">
       <ng-container *ngTemplateOutlet="estateInfo; context: {estate: estate, estateImages: galleryImages, tabIndex: 0}"></ng-container>
