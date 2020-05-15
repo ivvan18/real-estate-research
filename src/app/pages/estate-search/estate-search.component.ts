@@ -91,9 +91,6 @@ export class EstateSearchComponent implements OnInit, OnDestroy {
       {validators: [checkFloors, checkAreas]}
     );
 
-    this.estimateFormGroup.valueChanges
-      .subscribe(() => this.getFormValidationErrors());
-
     this.subscribeAddressChanges();
 
     forkJoin(
@@ -225,19 +222,12 @@ export class EstateSearchComponent implements OnInit, OnDestroy {
   getFormValidationErrors() {
     let hasErrors = false;
     Object.keys(this.estimateFormGroup.controls).forEach(key => {
-
-      const controlErrors: ValidationErrors = this.estimateFormGroup.get(key).errors;
-      if (controlErrors != null) {
-        hasErrors = true;
-        Object.keys(controlErrors).forEach(keyError => {
-          console.log('Key control: ' + key + ', keyError: ' + keyError + ', err value: ', controlErrors[keyError]);
-        });
-      } else {
-        console.log('Key control: ' + key + ' has no errors');
-      }
+        if (this.estimateFormGroup.get(key).errors && this.estimateFormGroup.get(key).touched) {
+          hasErrors = true;
+        }
     });
 
-    this.hasEstimateFormErrors = hasErrors;
+    return hasErrors || this.estimateFormGroup.hasError('areasIncorrect') || this.estimateFormGroup.hasError('floorsIncorrect');
   }
 
   onRulesClicked() {
