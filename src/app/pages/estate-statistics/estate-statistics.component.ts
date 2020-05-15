@@ -14,8 +14,13 @@ import {CurrencyPipe} from '@angular/common';
 export class EstateStatisticsComponent implements OnInit, OnDestroy {
   isFetching = true;
   displayedColumns: string[] = ['area', 'sell_price', 'rent_price', 'coeff'];
+  displayedUnderratedColumns: string[] = ['price', 'predicted', 'diff'];
+  displayedOverratedColumns: string[] = ['price', 'predicted', 'diff'];
+
   dataSource: MatTableDataSource<any>;
-  colorPalette = ['#3F51B5', '#006CC6', '#0080C5', '#0091B5', '#009E9D', '#05A985'];
+  dataUnderratedSource: MatTableDataSource<any>;
+  dataOverratedSource: MatTableDataSource<any>;
+
   greenRedPalette = ['#508104', '#9e8e01', '#f3b800', '#db8200', '#b64201'];
   municipalities = [];
   municipalitiesSqMeterPrices = [];
@@ -35,12 +40,13 @@ export class EstateStatisticsComponent implements OnInit, OnDestroy {
       this.rest.getEntities('top'),
       this.rest.getEntities('districts'),
       this.rest.getEntities('ao'),
-      this.rest.getEntities('ao_coords')
+      this.rest.getEntities('ao_coords'),
+      this.rest.getEntities('compare')
     ).pipe(
         takeUntil(this.destroy$),
         finalize(() => this.isFetching = false)
       )
-      .subscribe(([top, districts, aos, aoCoords]) => {
+      .subscribe(([top, districts, aos, aoCoords, compare]) => {
         console.log('Top: ', top);
         this.dataSource = new MatTableDataSource(top);
 
@@ -49,6 +55,12 @@ export class EstateStatisticsComponent implements OnInit, OnDestroy {
         console.log('Aos: ', aos);
         console.log('Ao_coords: ', aoCoords);
 
+        console.log('compare: ', compare);
+
+        this.dataUnderratedSource = new MatTableDataSource(compare.Data.slice(0, 10)
+          .map(item => ({id: item.id, price: item.price, predicted: item.predicted, diff: Math.abs(item.price - item.predicted)})));
+        this.dataOverratedSource = new MatTableDataSource(compare.Data.slice(10, 20)
+          .map(item => ({id: item.id, price: item.price, predicted: item.predicted, diff: Math.abs(item.price - item.predicted)})));
         this.municipalitiesSqMeterPrices = districts.districts.map(district => district.avg_sq).sort((a, b) => a - b);
         this.municipalitiesCoeffs = districts.districts.map(district => district.avg_coeff).sort((a, b) => a - b);
 
@@ -174,10 +186,6 @@ export class EstateStatisticsComponent implements OnInit, OnDestroy {
       });
   }
 
-  chooseRandomColor(): string {
-    return this.colorPalette[this.getRandomInt(0, this.colorPalette.length - 1)];
-  }
-
   chooseClusterColor(entities: number[], entity: number) {
     if (!entity) {
       return '#757575';
@@ -254,5 +262,9 @@ export class EstateStatisticsComponent implements OnInit, OnDestroy {
 
     this.router.navigate([]).then(() => { window.open('/estate?sell=' + sellUrlAarray[sellUrlAarray.length - 1] + '&rent=' +
       rentUrlArray[rentUrlArray.length - 1], '_blank'); });
+  }
+
+  onUnderOverClicked(estate: any) {
+    this.router.navigate([]).then(() => { window.open('/estate/' + estate.id, '_blank'); });
   }
 }

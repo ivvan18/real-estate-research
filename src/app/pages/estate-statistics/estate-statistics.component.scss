@@ -4,7 +4,7 @@
   padding: 100px 50px 50px;
 }
 
-.top-header {
+.table-header {
   font-size: 32px;
   font-weight: 700;
 }
@@ -22,16 +22,22 @@
   width: 45%;
 }
 
-.top-table {
-  width: 65%;
+.row-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.stats-table {
   margin-bottom: 40px;
 }
 
-.top-table-line {
+.table-line {
   cursor: pointer;
 }
 
-.top-table-line:hover {
+.table-line:hover {
   background-color: #f5f5f5;
 }
 
