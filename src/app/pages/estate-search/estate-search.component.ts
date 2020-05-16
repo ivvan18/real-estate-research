@@ -21,9 +21,9 @@ export class EstateSearchComponent implements OnInit, OnDestroy {
   estimateFormGroup: FormGroup;
   areasMatcher = new AreasMatcher();
   floorsMatcher = new FloorsMatcher();
-  hasEstimateFormErrors = false;
   estimateEstateLoading = false;
   estimatedPrice: number;
+  estimatedAlternatives = [];
 
   addressSearchString = new FormControl('');
   areAddressesLoading: boolean;
@@ -54,6 +54,7 @@ export class EstateSearchComponent implements OnInit, OnDestroy {
   averagePayback: number;
   recordsCount: number;
   flatsCount: number;
+  overrateRate: number;
   MyBalloonContentLayoutClass: any;
 
   wallMaterials = [
@@ -91,6 +92,8 @@ export class EstateSearchComponent implements OnInit, OnDestroy {
       {validators: [checkFloors, checkAreas]}
     );
 
+    this.estimateFormGroup.valueChanges.subscribe(() => this.estimatedPrice = 0);
+
     this.subscribeAddressChanges();
 
     forkJoin(
@@ -98,7 +101,8 @@ export class EstateSearchComponent implements OnInit, OnDestroy {
         averagePayback: this.rest.getEntities('payback'),
         recordsCount: this.rest.getEntities('records'),
         flatsCount: this.rest.getEntities('flats'),
-        intervals: this.rest.getEntities('intervals')
+        intervals: this.rest.getEntities('intervals'),
+        overrateRate: this.rest.getEntities('mlcoeff')
       }
     )
     .pipe(
@@ -110,13 +114,14 @@ export class EstateSearchComponent implements OnInit, OnDestroy {
       this.averagePayback = result.averagePayback['Average payback period'];
       this.recordsCount = result.recordsCount['Total records'];
       this.flatsCount = result.flatsCount['Total flats'];
+      this.overrateRate = Number((result.overrateRate.Rate).toFixed(2));
       this.coeffSelectedMin = this.coeffMin = result.intervals.coeffMin;
       this.coeffSelectedMax = this.coeffMax = result.intervals.coeffMax;
       this.squareSelectedMin = this.squareMin = result.intervals.squareMin;
       this.squareSelectedMax = this.squareMax = result.intervals.squareMax;
       this.priceSelectedMin = this.priceMin = result.intervals.priceMin;
       this.priceSelectedMax = this.priceMax = result.intervals.priceMax;
-      console.log('Result: ', this.averagePayback, this.recordsCount, this.flatsCount);
+      console.log('Result: ', this.averagePayback, this.recordsCount, this.flatsCount, this.overrateRate);
 
       this.onSearchEstatesClicked();
     });
@@ -150,9 +155,8 @@ export class EstateSearchComponent implements OnInit, OnDestroy {
       });
   }
 
-  onEstatePlacemarkClicked(url: string) {
-    const strings = url.split('/');
-    this.router.navigate([]).then(() => { window.open('/estate/' + strings[strings.length - 1], '_blank'); });
+  onEstateAlternativeClicked(estate: any) {
+    this.router.navigate([]).then(() => { window.open('/estate/' + estate.id, '_blank'); });
   }
 
   onEstatePlacemarkClickedNew(sellUrl: string, rentUrl: string) {
@@ -208,15 +212,29 @@ export class EstateSearchComponent implements OnInit, OnDestroy {
 
     console.log('onEstimateEstateClicked: ', filters);
 
-    this.rest.getEntities('estimate', filters)
-      .pipe(
-        takeUntil(this.destroy$),
-        finalize(() => this.estimateEstateLoading = false)
-      )
-      .subscribe(data => {
-        console.log('Getting prediction data: ', data);
-        this.estimatedPrice = data['Predicted price'];
-      });
+    forkJoin(
+      this.rest.getEntities('estimate', filters),
+      this.rest.getEntities('alternatives', {latitude: filters.latitude, longitude: filters.longitude, area: filters.totalArea})
+        .pipe(
+          switchMap(alternatives => {
+            console.log('alternatives: ', alternatives);
+            const alts = alternatives['Matching results'].slice(0, 8);
+
+            return forkJoin(alts.map(alt => this.rest.getEntityById('realty', alt.id)));
+          })
+        )
+    )
+    .pipe(
+      takeUntil(this.destroy$),
+      finalize(() => this.estimateEstateLoading = false)
+    )
+    .subscribe(([data, alternatives]) => {
+      console.log('Getting prediction data: ', data);
+      this.estimatedPrice = data['Predicted price'];
+
+      console.log('alternatives from forkJoin: ', alternatives);
+      this.estimatedAlternatives = alternatives.map((realty: any) => realty.realty);
+    });
   }
 
   getFormValidationErrors() {

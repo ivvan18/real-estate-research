@@ -14,8 +14,9 @@ import {Ng5SliderModule} from 'ng5-slider';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatCardModule} from '@angular/material/card';
 
-const MatModules = [MatButtonModule, MatInputModule, MatFormFieldModule, MatSelectModule,
+const MatModules = [MatButtonModule, MatInputModule, MatFormFieldModule, MatSelectModule, MatCardModule,
   MatProgressSpinnerModule, MatAutocompleteModule, MatProgressBarModule, MatDialogModule];
 
 @NgModule({

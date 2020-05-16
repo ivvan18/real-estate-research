@@ -42,7 +42,7 @@
       <mat-card-header>
         <mat-card-title>{{estate.rooms_count}}-комн. квартира, {{estate.area}} м&#178;</mat-card-title>
         <mat-card-subtitle>{{estate.address}}</mat-card-subtitle>
-        <mat-card-subtitle>м. {{estate.metro}}</mat-card-subtitle>
+        <mat-card-subtitle *ngIf="estate.metro">м. {{estate.metro}}</mat-card-subtitle>
       </mat-card-header>
       <div class="pictures-container">
         <ngx-gallery [options]="galleryOptions" [images]="estateImages" class="ngx-gallery"></ngx-gallery>

@@ -107,8 +107,6 @@
             {{ estimateEstateLoading ? '' : 'Найти'}}
             <mat-spinner *ngIf="estimateEstateLoading" class="spinner" [diameter]="20"></mat-spinner>
           </button>
-
-          <div *ngIf="estimatedPrice" [style.color]="'white'">Предсказываемая цена квартиры: {{estimatedPrice}}</div>
         </div>
         <div *ngIf="!isEstateEstimate" class="search-button-section"
              [style.width]="'75%'"
@@ -138,8 +136,12 @@
       <div class="stats-number">{{flatsCount}}</div>
       <div class="stats-sub-header">Найдено объектов с окупаемостью</div>
     </div>
+    <div class="stats-item">
+      <div class="stats-number">{{overrateRate}} %</div>
+      <div class="stats-sub-header">На столько в среднем завышена цена квартир</div>
+    </div>
   </div>
-  <div class="result-container">
+  <div *ngIf="!isEstateEstimate" class="result-container">
     <div class="map-container">
       <mat-spinner *ngIf="estatesLoading" class="spinner" [diameter]="150"></mat-spinner>
       <angular-yandex-map *ngIf="!estatesLoading" [center]="[(estates[0] || {latitude: 55.75}).latitude, (estates[0] || {longitude: 37.61}).longitude]" [options]="{searchControlProvider: 'yandex#search'}" [zoom]="9">
@@ -164,6 +166,36 @@
       </button>
     </div>
   </div>
+  <ng-container *ngIf="isEstateEstimate">
+    <div class="result-container">
+      <div class="estimate-container">
+        <mat-spinner *ngIf="estimateEstateLoading" class="estimate-spinner" [diameter]="150"></mat-spinner>
+        <div *ngIf="!estimateEstateLoading && !estimatedPrice" class="estimate-header estimate-spinner">
+          Начните поиск чтобы увидеть результаты
+        </div>
+
+        <ng-container *ngIf="!estimateEstateLoading && estimatedPrice">
+          <h2 class="estimate-header">Предсказываемая цена квартиры: {{estimatedPrice | currency: '&#8381;'}}</h2>
+          <h2 class="estimate-header">Похожие квартиры в этом районе</h2>
+          <div class="estimate-analogs">
+            <mat-card *ngFor="let alternative of estimatedAlternatives" class="estimate-card">
+              <mat-card-header>
+                <mat-card-title>{{alternative.price | currency : '&#8381;'}} {{alternative.type === 2 ? ' /мес.' : ''}}</mat-card-title>
+                <mat-card-subtitle>{{alternative.area}} м&#178;</mat-card-subtitle>
+              </mat-card-header>
+              <img class="estimate-card-img" mat-card-image [src]="alternative.images.split(',')[0]">
+              <mat-card-content>
+                <p>{{alternative.address}}</p>
+              </mat-card-content>
+              <mat-card-actions>
+                <button mat-button (click)="onEstateAlternativeClicked(alternative)">Подробнее</button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
   <app-footer (contact)="navigate('landing')"></app-footer>
 </ng-container>
 
