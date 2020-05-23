@@ -6,6 +6,7 @@ import {AuthService} from '../services/auth.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialogRef} from '@angular/material/dialog';
 import {takeUntil} from 'rxjs/operators';
+import {INTERNET_ERROR} from '../../../services/rest.service';
 
 @Component({
   selector: 'app-restore-password-page',
@@ -94,7 +95,7 @@ export class RestorePasswordPageComponent implements OnInit, OnDestroy {
         error => {
           console.log('Forgot error: ', error);
           this.isFetching = false;
-          this.error = error.error.message;
+          this.error = error.error.message || INTERNET_ERROR;
         });
   }
 
@@ -116,7 +117,7 @@ export class RestorePasswordPageComponent implements OnInit, OnDestroy {
         error => {
           console.log('Restore password error: ', error);
           this.isFetching = false;
-          this.error = error.error.message;
+          this.error = error.error.message || INTERNET_ERROR;
         });
   }
 

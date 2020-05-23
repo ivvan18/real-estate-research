@@ -6,6 +6,7 @@ import {Router} from '@angular/router';
 import {MatDialogRef} from '@angular/material/dialog';
 import {takeUntil} from 'rxjs/operators';
 import {checkPasswords, RepeatPasswordMatcher} from '../util/util';
+import {INTERNET_ERROR} from '../../../services/rest.service';
 
 @Component({
   selector: 'app-change-password-page',
@@ -78,7 +79,7 @@ export class ChangePasswordPageComponent implements OnInit, OnDestroy {
         error => {
           console.log('Change password error: ', error);
           this.isFetching = false;
-          this.error = error.error.message;
+          this.error = error.error.message || INTERNET_ERROR;
         });
   }
 

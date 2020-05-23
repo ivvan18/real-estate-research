@@ -5,6 +5,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {AuthService} from '../services/auth.service';
 import {takeUntil} from 'rxjs/operators';
+import {INTERNET_ERROR} from '../../../services/rest.service';
 
 @Component({
   selector: 'app-sign-in-page',
@@ -61,7 +62,7 @@ export class SignInPageComponent implements OnInit, OnDestroy {
         error => {
           console.log('Login Error: ', error);
           this.isFetching = false;
-          this.error = error.error.message;
+          this.error = error.error.message || INTERNET_ERROR;
         });
   }
 

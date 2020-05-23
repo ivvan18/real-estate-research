@@ -18,6 +18,11 @@ import {MatDialog} from '@angular/material/dialog';
 export class EstateSearchComponent implements OnInit, OnDestroy {
   @ViewChild('rules') rules: TemplateRef<any>;
 
+  clusterer = {
+    preset: 'twirl#invertedBlueClusterIcons',
+    hasBaloon: false
+  };
+
   estimateFormGroup: FormGroup;
   areasMatcher = new AreasMatcher();
   floorsMatcher = new FloorsMatcher();

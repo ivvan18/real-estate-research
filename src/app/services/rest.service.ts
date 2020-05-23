@@ -3,6 +3,8 @@ import {environment} from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 
+export const INTERNET_ERROR = 'Отсутствует интернет соединение';
+
 @Injectable({
   providedIn: 'root'
 })

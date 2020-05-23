@@ -6,6 +6,7 @@ import {Subject} from 'rxjs';
 import {AuthService} from '../services/auth.service';
 import {takeUntil} from 'rxjs/operators';
 import {checkPasswords, RepeatPasswordMatcher} from '../util/util';
+import {INTERNET_ERROR} from '../../../services/rest.service';
 
 @Component({
   selector: 'app-register-page',
@@ -77,7 +78,7 @@ export class RegisterPageComponent implements OnInit, OnDestroy {
         error => {
           console.log('Register Error: ', error);
           this.isFetching = false;
-          this.error = error.error.message;
+          this.error = error.error.message || INTERNET_ERROR;
         });
   }
 

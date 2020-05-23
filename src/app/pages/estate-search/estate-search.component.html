@@ -144,7 +144,7 @@
   <div *ngIf="!isEstateEstimate" class="result-container">
     <div class="map-container">
       <mat-spinner *ngIf="estatesLoading" class="spinner" [diameter]="150"></mat-spinner>
-      <angular-yandex-map *ngIf="!estatesLoading" [center]="[(estates[0] || {latitude: 55.75}).latitude, (estates[0] || {longitude: 37.61}).longitude]" [options]="{searchControlProvider: 'yandex#search'}" [zoom]="9">
+      <angular-yandex-map *ngIf="!estatesLoading" [clusterer]="clusterer" [center]="[(estates[0] || {latitude: 55.75}).latitude, (estates[0] || {longitude: 37.61}).longitude]" [options]="{searchControlProvider: 'yandex#search'}" [zoom]="9">
         <ng-container *ngFor="let estate of estates">
           <angular-yandex-placemark
                                     [geometry]="[estate.latitude, estate.longitude]"

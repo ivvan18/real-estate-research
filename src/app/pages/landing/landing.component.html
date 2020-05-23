@@ -65,7 +65,7 @@
         <mat-icon *ngIf="!feedbackIsFetching">send</mat-icon>
       </button>
       <mat-error *ngIf="feedbackError && feedbackFormSubmitted">
-        Произошла ошибка при отправлении
+        {{feedbackError}}
       </mat-error>
     </form>
   </div>

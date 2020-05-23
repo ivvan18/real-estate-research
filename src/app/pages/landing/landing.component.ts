@@ -5,7 +5,7 @@ import {IUser} from '../auth/models/IUser';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {RestService} from '../../services/rest.service';
+import {INTERNET_ERROR, RestService} from '../../services/rest.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
@@ -81,7 +81,7 @@ export class LandingComponent implements OnInit, OnDestroy {
         error => {
           console.log('Feedback Error: ', error);
           this.feedbackIsFetching = false;
-          this.feedbackError = error.error.message.name;
+          this.feedbackError = INTERNET_ERROR;
         });
   }
 
