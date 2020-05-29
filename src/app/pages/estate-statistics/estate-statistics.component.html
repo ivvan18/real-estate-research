@@ -72,11 +72,11 @@
   <h2 class="table-header">Статистика по округам Москвы</h2>
   <div class='legend-scale'>
     <ul class='legend-labels'>
-      <li><span style='background:#508104;'></span>Дешевле</li>
-      <li><span style='background:#9e8e01;'></span></li>
-      <li><span style='background:#f3b800;'></span></li>
-      <li><span style='background:#db8200;'></span></li>
-      <li><span style='background:#b64201;'></span>Дороже</li>
+      <li><span [style.background]="greenRedPalette[0]"></span>Дешевле</li>
+      <li><span [style.background]="greenRedPalette[1]"></span></li>
+      <li><span [style.background]="greenRedPalette[2]"></span></li>
+      <li><span [style.background]="greenRedPalette[3]"></span></li>
+      <li><span [style.background]="greenRedPalette[4]"></span>Дороже</li>
     </ul>
   </div>
   <div class="headers">
@@ -96,10 +96,10 @@
     </div>
     <div class="sub-header">
       <mat-button-toggle-group #group="matButtonToggleGroup" (change)="onAdministriesMapTypeChanged($event)">
-        <mat-button-toggle value="left" aria-label="Text align left" [checked]="true">
+        <mat-button-toggle value="meter" aria-label="Text align left" [checked]="true">
           Квадратный метр
         </mat-button-toggle>
-        <mat-button-toggle value="center" aria-label="Text align center">
+        <mat-button-toggle value="coeff" aria-label="Text align center">
           Окупаемость
         </mat-button-toggle>
       </mat-button-toggle-group>

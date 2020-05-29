@@ -5,6 +5,7 @@ import {finalize, takeUntil} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {MatTableDataSource} from '@angular/material/table';
 import {CurrencyPipe} from '@angular/common';
+import {getIntervalIndex, getKDEIntervals, normalize} from '../../shared/util';
 
 @Component({
   selector: 'app-estate-statistics',
@@ -28,7 +29,11 @@ export class EstateStatisticsComponent implements OnInit, OnDestroy {
   municipalitiesFetching = false;
   administries = [];
   administriesSqMeterPrices = [];
+  administriesSqMeterPricesIntervals = [];
+  normalizedAdministriesSqMeterPrices = [];
   administriesCoeffs = [];
+  administriesCoeffsIntervals = [];
+  normalizedAdministriesCoeffs = [];
   administriesFetching = false;
 
   private readonly destroy$ = new Subject();
@@ -108,12 +113,24 @@ export class EstateStatisticsComponent implements OnInit, OnDestroy {
 
         this.administriesSqMeterPrices = aos.ao.map(ao => ao.avg_sq).sort((a, b) => a - b);
         this.administriesCoeffs = aos.ao.map(ao => ao.avg_coeff).sort((a, b) => a - b);
-        console.log('administriesSqMeterPrices: ', this.administriesSqMeterPrices);
-        console.log('administriesCoeffs: ', this.administriesCoeffs);
+        this.normalizedAdministriesSqMeterPrices = normalize(this.administriesSqMeterPrices);
+        this.normalizedAdministriesCoeffs = normalize(this.administriesCoeffs);
+        this.administriesSqMeterPricesIntervals = getKDEIntervals(this.normalizedAdministriesSqMeterPrices, 50, 50, 1 / 49);
+        this.administriesCoeffsIntervals = getKDEIntervals(this.normalizedAdministriesCoeffs, 23, 23, 1 / 22);
 
-        aos.ao.forEach(ao => {
+        console.log('administriesSqMeterPrices: ', this.administriesSqMeterPrices);
+        console.log('normalizedAdministriesSqMeterPrices: ', this.normalizedAdministriesSqMeterPrices);
+
+        console.log('administriesCoeffs: ', this.administriesCoeffs);
+        console.log('normalizedAdministriesCoeffs: ', this.normalizedAdministriesCoeffs);
+
+        console.log('administriesSqMeterPricesIntervals: ', this.administriesSqMeterPricesIntervals);
+        console.log('administriesCoeffsIntervals: ', this.administriesCoeffsIntervals);
+
+        aos.ao.sort((a, b) => a.avg_coeff - b.avg_coeff).forEach(ao => {
+          const normalizedValue = this.normalizedAdministriesSqMeterPrices[this.administriesSqMeterPrices.findIndex(el => el === ao.avg_sq)];
           const options = {
-            fillColor: this.chooseClusterColor(this.administriesSqMeterPrices, ao.avg_sq),
+            fillColor: this.greenRedPalette[getIntervalIndex(normalizedValue, this.administriesSqMeterPricesIntervals)],
             strokeColor: '#0000FF',
             opacity: 0.7,
             strokeWidth: 2,
@@ -224,14 +241,24 @@ export class EstateStatisticsComponent implements OnInit, OnDestroy {
     }, 100);
   }
 
+  getNormalizedValue(value: any, administry: any, index?: any) {
+    if (value.value === 'coeff') {
+      return this.normalizedAdministriesCoeffs[index || this.administriesCoeffs.findIndex(el => el === administry.feature.properties.avg_coeff)];
+    } else {
+      return this.normalizedAdministriesSqMeterPrices[this.administriesSqMeterPrices.findIndex(el => el === administry.feature.properties.avg_sq)];
+    }
+  }
+
   onAdministriesMapTypeChanged(value: any) {
     console.log(this.administries);
     this.administriesFetching = true;
 
-    this.administries.forEach(administry => {
-      administry.options.fillColor = this.chooseClusterColor(value.value === 'coeff' ?
-        this.administriesCoeffs : this.administriesSqMeterPrices, value.value === 'coeff' ?
-        administry.feature.properties.avg_coeff : administry.feature.properties.avg_sq);
+    this.administries.forEach((administry, idx) => {
+      console.log('index: ', this.getNormalizedValue(value, administry, value.value === 'coeff' ? idx : null));
+
+      administry.options.fillColor = this.greenRedPalette[getIntervalIndex(
+        this.getNormalizedValue(value, administry, value.value === 'coeff' ? idx : null),
+        value.value === 'coeff' ? this.administriesCoeffsIntervals : this.administriesSqMeterPricesIntervals)];
     });
 
     setTimeout(() => {
