@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {RestService} from '../../services/rest.service';
 import {debounceTime, filter, finalize, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {forkJoin, Subject} from 'rxjs';
+import {forkJoin, of, Subject} from 'rxjs';
 import {FormBuilder, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {IEvent} from 'angular8-yandex-maps';
@@ -225,7 +225,7 @@ export class EstateSearchComponent implements OnInit, OnDestroy {
             console.log('alternatives: ', alternatives);
             const alts = alternatives['Matching results'].slice(0, 8);
 
-            return forkJoin(alts.map(alt => this.rest.getEntityById('realty', alt.id)));
+            return alts.length ? forkJoin(alts.map(alt => this.rest.getEntityById('realty', alt.id))) : of([]);
           })
         )
     )

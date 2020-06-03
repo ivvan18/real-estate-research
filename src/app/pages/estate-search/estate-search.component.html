@@ -176,14 +176,15 @@
 
         <ng-container *ngIf="!estimateEstateLoading && estimatedPrice">
           <h2 class="estimate-header">Предсказываемая цена квартиры: {{estimatedPrice | currency: '&#8381;'}}</h2>
-          <h2 class="estimate-header">Похожие квартиры в этом районе</h2>
+          <h2 class="estimate-header">Похожие квартиры в этом районе <span *ngIf="estimatedAlternatives.length === 0" class="estimate-header">не найдены</span></h2>
           <div class="estimate-analogs">
             <mat-card *ngFor="let alternative of estimatedAlternatives" class="estimate-card">
               <mat-card-header>
                 <mat-card-title>{{alternative.price | currency : '&#8381;'}} {{alternative.type === 2 ? ' /мес.' : ''}}</mat-card-title>
                 <mat-card-subtitle>{{alternative.area}} м&#178;</mat-card-subtitle>
               </mat-card-header>
-              <img class="estimate-card-img" mat-card-image [src]="alternative.images.split(',')[0]">
+              <img default="../../../assets/util/not-found.png"
+                   class="estimate-card-img" mat-card-image [src]="alternative.images.split(',')[0]">
               <mat-card-content>
                 <p>{{alternative.address}}</p>
               </mat-card-content>

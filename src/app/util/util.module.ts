@@ -6,13 +6,15 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatButtonModule} from '@angular/material/button';
+import { ImagePreloadDirective } from './image-preload.directive';
 
 const MatModules = [MatIconModule, MatMenuModule, MatDividerModule, MatButtonModule];
 
 @NgModule({
   declarations: [
     NavbarComponent,
-    FooterComponent
+    FooterComponent,
+    ImagePreloadDirective
   ],
   imports: [
     CommonModule,
@@ -20,7 +22,8 @@ const MatModules = [MatIconModule, MatMenuModule, MatDividerModule, MatButtonMod
   ],
   exports: [
     NavbarComponent,
-    FooterComponent
+    FooterComponent,
+    ImagePreloadDirective
   ]
 })
 export class UtilModule { }
